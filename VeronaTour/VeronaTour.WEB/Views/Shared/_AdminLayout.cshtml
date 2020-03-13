@@ -1,0 +1,174 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="shortcut icon" type="image/x-icon" href="~/Content/images/Untitled-2.jpg">
+    <title>VT Admin</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
+    <link href="@Url.Content("~/Content/AdminLTE/bower_components/bootstrap/dist/css/bootstrap.min.css")" rel='stylesheet' />
+    <link href="@Url.Content("~/Content/AdminLTE/bower_components/select2/dist/css/select2.min.css")" rel='stylesheet' />
+    <link href="@Url.Content("~/Content/AdminLTE/bower_components/font-awesome/css/font-awesome.min.css")" rel='stylesheet' />
+    <link href="@Url.Content("~/Content/AdminLTE/bower_components/Ionicons/css/ionicons.min.css")" rel='stylesheet' />
+    <link href="@Url.Content("~/Content/AdminLTE/dist/css/AdminLTE.min.css")" rel='stylesheet' />
+    <link href="@Url.Content("~/Content/AdminLTE/dist/css/skins/_all-skins.min.css")" rel='stylesheet' />
+    <link href="@Url.Content("~/Content/AdminLTE/style.css")" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+    <div class="wrapper">
+        <header class="main-header">
+            <a href="@Url.Action("Index", "Home")" class="logo" target="_blank">
+                <span class="logo-mini"><b>V</b>T</span>
+                <span class="logo-lg"><b>Verona</b>Tour</span>
+            </a>
+            <nav class="navbar navbar-static-top">
+                <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+                    <span class="sr-only">Toggle navigation</span>
+                </a>
+                <div class="navbar-custom-menu">
+                    <ul class="nav navbar-nav">
+                        <li class="dropdown user user-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <img src="~/Content/images/user.png" class="user-image" alt="User Image">
+                                @ViewData["UserName"]
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li class="user-header">
+                                    <img src="~/Content/images/user.png" class="img-circle" alt="User Image">
+                                    <p>
+                                        @if (User.IsInRole("Admin"))
+                                        {
+                                            <small>Admin</small>
+                                        }
+                                        else if (User.IsInRole("Manager"))
+                                        {
+                                            <small>Manager</small>
+                                        }
+                                    </p>
+                                </li>
+                                <li class="user-footer">
+                                    <div class="pull-left">
+                                        @Html.ActionLink("Profile", "Profile", "Home", null, new { @class = "btn btn-default btn-flat" })
+                                    </div>
+                                    <div class="pull-right">
+                                        @Html.ActionLink("Log Out", "LogOff", "Account", null, new { @class = "btn btn-default btn-flat" })
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        <aside class="main-sidebar">
+            <section class="sidebar">
+                <div class="user-panel">
+                    <div class="pull-left image">
+                        <img src="~/Content/images/user.png" class="img-circle" alt="User Image">
+                    </div>
+                    <div class="pull-left info">
+                        <div>@ViewData["UserName"]</div>
+                        <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+                    </div>
+                </div>
+                <ul class="sidebar-menu" data-widget="tree">
+                    <li class="header">Menu</li>
+                    <li>
+                        <a href="@Url.Action("Index", "Admin")">
+                            <i class="fa fa-home"></i> <span>Home</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Orders", "Admin")">
+                            <i class="fa fa-shopping-cart"></i> <span>Orders</span>
+                        </a>
+                    </li>
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="fa fa-plane"></i> <span>Tours</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li>
+                                @Html.ActionLink("Tours list", "Tours", "Admin")
+
+                            </li>
+                            <li>@Html.ActionLink("Add tour", "CreateTour", "Admin")</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Users", "Admin")">
+                            <i class="fa fa-users"></i> <span>Users</span>
+                        </a>
+                    </li>
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="fa fa-bed"></i> <span>Hotel</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li>
+                                @Html.ActionLink("Hotels list", "Hotels", "Admin")
+                            </li>
+                            <li>@Html.ActionLink("Add hotel", "CreateHotel", "Admin")</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Sale", "Admin")">
+                            <i class="fa fa-percent"></i> <span>Sale Settings</span>
+                        </a>
+                    </li>
+                </ul>
+            </section>
+        </aside>
+        <div class="content-wrapper">
+            @RenderBody()
+        </div>
+    </div>
+
+
+    @Scripts.Render("~/Content/AdminLTE/bower_components/jquery/dist/jquery.min.js")
+    @Scripts.Render("~/Content/AdminLTE/bower_components/bootstrap/dist/js/bootstrap.min.js")
+    @Scripts.Render("~/Content/AdminLTE/bower_components/select2/dist/js/select2.full.js")
+    @Scripts.Render("~/Content/AdminLTE/dist/js/adminlte.min.js")
+    @Scripts.Render("~/Content/AdminLTE/bower_components/ckeditor/ckeditor.js")
+    @Scripts.Render("~/Content/AdminLTE/bower_components/ckeditor/adapters/jquery.js")
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+
+    @Scripts.Render("~/Scripts/script/admin-js.js")
+    <script>
+
+        //DateFilter
+        if (document.getElementById("StartDate") !== null)
+        {
+            document.getElementById("StartDate").value = '@ViewData["MinDate"]';
+            document.getElementById("EndDate").value = '@ViewData["MaxDate"]';
+        }
+
+        $(function () {
+            $('input[name="daterange"]').daterangepicker({
+                "maxSpan": {
+                    "days": 14
+                },
+                opens: 'right',
+                "endDate": '@ViewData["MaxDate"]',
+                "minDate": '@ViewData["MinDate"]'
+            }, function (start, end, label) {
+                    document.getElementById("StartDate").value = start.format('MM/DD/YYYY');
+                    document.getElementById("EndDate").value = end.format('MM/DD/YYYY');
+            })
+        });
+    </script>
+</body>
+</html>
+

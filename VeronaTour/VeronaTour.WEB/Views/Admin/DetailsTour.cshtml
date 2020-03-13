@@ -1,0 +1,105 @@
+﻿@model VeronaTour.BLL.DTOs.TourDTO
+
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="d-inline">
+        <h1>
+            Tour № @Model.Id
+        </h1>
+        @if (Model.HotTour == true)
+        {
+            <span class=" col-sm-2 mb-5 btn-danger">Hot Tour</span>
+        }
+    </div>
+    <ol class="breadcrumb">
+        <li>
+            <a href="@Url.Action("Index", "Admin")">
+                <i class="fa fa-dashboard"></i> Home
+            </a>
+        </li>
+        <li>
+            <a href="@Url.Action("Tours", "Admin")">
+                <i class="fa fa-dashboard"></i> Tours list
+            </a>
+        </li>
+        <li class="active">Tour №@Model.Id</li>
+    </ol>
+</section>
+<!-- //Content Header -->
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box">
+                <div class="box-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover">
+                            <tbody>
+                                <tr>
+                                    <td>Tour number</td>
+                                    <td>@Model.Id</td>
+                                </tr>
+                                <tr>
+                                    <td>Tour title</td>
+                                    <td>@Model.Title</td>
+                                </tr>
+                                <tr>
+                                    <td>Tour type</td>
+                                    <td>@Model.Type.Title</td>
+                                </tr>
+                                <tr>
+                                    <td>Description</td>
+                                    <td>@Model.Description</td>
+                                </tr>
+                                <tr>
+                                    <td>Country</td>
+                                    <td>@Model.Country.Title</td>
+                                </tr>
+                                <tr>
+                                    <td>Price for one</td>
+                                    <td>@Model.Price $</td>
+                                </tr>
+                                <tr>
+                                    <td>Hotel</td>
+                                    <td>@Html.ActionLink(@Model.Hotel.Title, "Hotels", "Admin")</td>
+                                </tr>
+                                <tr>
+                                    <td>Feeding type</td>
+                                    <td>@Model.FeedingType.Title</td>
+                                </tr>
+                                <tr>
+                                    <td>Count of people</td>
+                                    <td>@Model.MinPeopleCount-@Model.MaxPeopleCount people</td>
+                                </tr>
+                                <tr>
+                                    <td>Date</td>
+                                    <td>@Model.StartDate.ToShortDateString()-@Model.EndDate.ToShortDateString()</td>
+                                </tr>
+                                <tr>
+                                    <td>Number of nights</td>
+                                    <td>@((Model.EndDate - Model.StartDate).TotalDays - 1) days</td>
+                                </tr>
+                                <tr class="@(( Model.CountOfTour<=0) ? "canceled-row": "") ">
+                                    <td>Count of tours</td>
+                                    <td>@Model.CountOfTour tours</td>
+                                </tr>
+                                <tr>
+                                    <td>Tour image</td>
+                                    <td>
+                                        @Html.Raw("<img id=\"base-img\" class=\"img-fluid\" alt=\"Image of tour description\" style=\"width: 300px; height: 200px\" src=\"data:image/jpeg;base64,"
++ Convert.ToBase64String(Model.Image) + "\" />");
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- //content -->

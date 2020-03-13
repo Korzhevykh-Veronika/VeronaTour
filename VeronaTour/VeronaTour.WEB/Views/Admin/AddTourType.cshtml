@@ -1,0 +1,60 @@
+﻿@model VeronaTour.BLL.DTOs.TourTypeDTO
+
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1> New tour type </h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="@Url.Action("Index", "Admin")">
+                <i class="fa fa-dashboard"></i> Home
+            </a>
+        </li>
+        <li>
+            <a href="@Url.Action("Tours", "Admin")">
+                <i class="fa fa-dashboard"></i> Tours list
+            </a>
+        </li>
+        <li>
+            <a href="@Url.Action("CreateTour", "Admin")">
+                <i class="fa fa-dashboard"></i> New tour
+            </a>
+        </li>
+        <li class="active">New tour type</li>
+    </ol>
+</section>
+<!-- //Content Header -->
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box">
+                @using (Html.BeginForm("AddTourType", "Admin", FormMethod.Post, new { id = "add" }))
+                {
+                    @Html.AntiForgeryToken()
+                    foreach (ModelState modelState in ViewData.ModelState.Values)
+                    {
+                        foreach (ModelError error in modelState.Errors)
+                        {
+                            <p class="text-danger font-weight-bold text-center ">@error.ErrorMessage</p>
+                        }
+                    }
+                    <div class="box-body">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = " col-form-label-lg" })
+                            @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="box-footer">
+                        <button type="submit" class="btn btn-success">Add tour type</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</section>
+<!-- //content -->

@@ -1,0 +1,34 @@
+﻿<!-- banner -->
+<div class="banner_inner">
+    <div class="services-breadcrumb">
+        <div class="inner_breadcrumb">
+            <ul class="short">
+                <li>
+                    @Html.ActionLink("Home", "Index", "Home")
+                    <i>|</i>
+                </li>
+                <li>My profile</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!--//banner -->
+<!--Profile -->
+<div class="col-md-12">
+    <h2 class="text-center" style="margin-top:30px;margin-bottom: 40px ">
+        Welcome to your personal account,
+        <br>
+        <strong> @ViewData["UserName"] </strong>
+    </h2>
+    <div class="btncab mx-auto mw-100">
+        @Html.ActionLink("Change personal details", "EditProfile", "Home", null, new { @class = "btncart " })
+        @Html.ActionLink("View order history", "UserOrder", "Home", null, new { @class = "btncart " })
+    </div>
+    @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
+    {
+        <div class="btncab mx-auto mw-100">
+            @Html.ActionLink("Admin panel", "Index", "Admin", null, new { @class = "btncart ", target = "_blank" })
+        </div>
+    }
+</div>
+<!--//Profile -->

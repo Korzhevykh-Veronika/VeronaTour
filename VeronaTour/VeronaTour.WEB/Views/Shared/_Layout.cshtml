@@ -1,0 +1,265 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verona Tour</title>
+    <link rel="shortcut icon" type="image/x-icon" href="~/Content/images/Untitled-2.jpg">
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/font-awesome.css")
+    @Scripts.Render("~/bundles/modernizr")
+
+    <link href="@Url.Content("~/Content/css/style-adaptability.css")" rel='stylesheet' type='text/css' />
+    <link href="@Url.Content("~/Content/css/style.css")" rel='stylesheet' type='text/css' />
+    <link rel="stylesheet" href="@Url.Content("~/Content/css/owl.carousel.css")" type="text/css" media="all">
+    <link rel="stylesheet" href="@Url.Content("~/Content/css/owl.theme.css")" type="text/css" media="all">
+    <link rel="stylesheet" href="@Url.Content("~/Content/css/shop.css")" type="text/css" />
+    <link href="@Url.Content("~/Content/css/easy-responsive-tabs.css")" rel='stylesheet' type='text/css' />
+    <link href="https://fonts.googleapis.com/css?family=Inconsolata:400,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800" rel="stylesheet">
+    <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/sweetalert2@7.12.15/dist/sweetalert2.min.css'>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
+</head>
+<body>
+    <!-- header -->
+    <div class="banner-top container-fluid" id="home">
+        <header>
+            <div class="row">
+                <div class="col-md-3 top-info text-left mt-lg-4">
+                    <ul>
+                        <li>
+                            <i class="fa fa-phone mt-3"></i> Call
+                        </li>
+                        <li class="number-phone ">+19706792065</li>
+                    </ul>
+                </div>
+                <div class="col-md-6 logo-w3layouts text-center">
+                    <h1 class="logo-w3layouts">
+                        @Html.ActionLink("Verona Tour", "Index", "Home", null, new { @class = "navbar-brand" })
+                    </h1>
+                </div>
+
+                <div class="col-md-3 top-info-cart text-right mt-lg-4">
+                    <ul class="cart-inner-info">
+                        <li class="button-log">
+                            <div class="dropdown">
+                                <button class="btn  dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background-color: #FFF8F4">
+                                    <span class="fa fa-user" aria-hidden="true"></span>
+                                </button>
+                                <ul class="dropdown-menu mega-menu" aria-labelledby="dropdownMenuButton" style="border-radius: 5px">
+                                    @if (User.Identity.IsAuthenticated)
+                                    {
+                                        <li class="reg">
+                                            @Html.ActionLink("My profile", "Profile", "Home")
+                                        </li>
+                                        <li class="reg">
+                                            @Html.ActionLink("Log Out", "LogOff", "Account")
+                                        </li>
+                                    }
+                                    else
+                                    {
+                                        <li class="reg">
+                                            @Html.ActionLink("Log In", "Login", "Account")
+                                        </li>
+                                        <li class="reg">
+                                            @Html.ActionLink("Sing Up", "Register", "Account")
+                                        </li>
+                                    }
+
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="galssescart galssescart2 cart cart box_1">
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <a href="@Url.Action("Order", "Home")">
+                                    <div class="top_googles_cart">
+                                        <i class="fa fa-cart-arrow-down"></i>
+                                        @if (Convert.ToInt32(@ViewData["TotalPrice"]) != 0)
+                                        {
+                                            <span class="simpleCart_total">@ViewData["TotalPrice"]$</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="simpleCart_total">Orders </span>
+                                        }
+
+                                    </div>
+                                </a>
+                            }
+                            else
+                            {
+                                <a href="@Url.Action("Order", "Home")" class="btn disabled">
+                                    <div class="top_googles_cart">
+                                        <i class="fa fa-cart-arrow-down"></i>
+                                        <span class="simpleCart_total">Orders </span>
+                                    </div>
+                                </a>
+                            }
+
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            @*<div class="search">
+                    <div class="mobile-nav-button">
+                        <button id="trigger-overlay" type="button">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+                    <div class="overlay overlay-door">
+                        <button type="button" class="overlay-close">
+                            <i class="fa fa-times" aria-hidden="true"></i>
+                        </button>
+                        <form class="searchform " action="search" method="get">
+                            <input id="typeahead" type="text" placeholder="Enter something..." name="s">
+                            <button type="submit">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </form>
+
+                    </div>
+                </div>*@
+            <label class="top-log mx-auto"></label>
+            <nav class="navbar navbar-expand-lg navbar-light bg-light top-header mb-2">
+                <button class="navbar-toggler mx-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon">
+
+                    </span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav nav-mega mx-auto" style="background: #FFF8F4">
+                        <li class="nav-item ">
+                            @Html.ActionLink("Home", "Index", "Home", null, new { @class = "nav-link ml-lg-0" })
+                            <span class="sr-only">(current)</span>
+                        </li>
+                        <li class="nav-item ">
+                            @Html.ActionLink("Tour Search", "Tours", "Home", null, new { @class = "nav-link ml-lg-0" })
+                        </li>
+                        <li class="nav-item">
+                            @Html.ActionLink("About", "About", "Home", null, new { @class = "nav-link ml-lg-0" })
+                        </li>
+                        <li class="nav-item">
+                            @Html.ActionLink("Contacts", "Contact", "Home", null, new { @class = "nav-link ml-lg-0" })
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+    </div>
+    <!-- //header -->
+    <!-- body -->
+    <div class="content">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    @if (ViewData.Keys.Contains("alert"))
+                    {
+                        if (ViewData["alert"].ToString().Equals("registered"))
+                        {
+                            <div class="alert alert-success" style=" margin-top: 0; margin-bottom: 10px;">
+                                <h4>You are successfully registered and authorized</h4>
+                            </div>
+                        }
+                        else if (ViewData["alert"].ToString().Equals("login"))
+                        {
+                            <div class="alert alert-success" style=" margin-top: 0; margin-bottom: 10px;">
+                                <h4>You are successfully logged in</h4>
+                            </div>
+                        }
+
+                    }
+                </div>
+            </div>
+        </div>
+        @RenderBody()
+    </div>
+    <!--//body -->
+    <!--footer -->
+    <footer class="py-lg-4 py-3">
+        <div class="container-fluid px-lg-4 px-3">
+            <div class="row footer-top-w3layouts">
+                <div class="col-lg-4 footer-grid-w3ls">
+                    <div class="footer-title">
+                        <h3>About</h3>
+                    </div>
+                    <div class="footer-text">
+                        <p>
+                            Our company has been on the market for more than 2 years, but in such a short period we were able to fulfill the dreams of several thousand people.
+                            Focusing on individual work with each client, taking into account all your requirements and wishes, we do everything to make your trip successful, and your vacation was filled only with pleasant impressions!
+                        </p>
+                    </div>
+                </div>
+                <div class="col-lg-4 footer-grid-w3ls">
+                    <div class="footer-title">
+                        <h3>Contact Us</h3>
+                    </div>
+                    <div class="contact-info">
+                        <h4>Address :</h4>
+                        <p>Office 303, 132 W 31st St, New York, NY 10001, USA</p>
+                        <div class="phone">
+                            <h4>Contact :</h4>
+                            <p>Phone : +19706792065</p>
+                            <p> Email: vkorzhevyh@gmail.com</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 footer-grid-w3ls">
+                    <div class="footer-title">
+                        <h3>Navigation</h3>
+                    </div>
+                    <ul class="links">
+                        <li>
+                            @Html.ActionLink("Home", "Index", "Home")
+                        </li>
+                        <li>
+                            @Html.ActionLink("Tour Search", "Tours", "Home")
+                        </li>
+                        <li>
+                            @Html.ActionLink("About", "About", "Home")
+                        </li>
+                        <li>
+                            @Html.ActionLink("Contacts", "Contact", "Home")
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- //footer -->
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/Scripts/jquery.maskedinput.min.js")
+    @Scripts.Render("~/Scripts/umd/popper.min.js")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/Scripts/script/easy-responsive-tabs.js")
+    @Scripts.Render("~/Scripts/script/owl.carousel.js")
+    @RenderSection("scripts", required: false)
+    <script src="@Url.Content("https://cdn.jsdelivr.net/npm/sweetalert2@7.12.15/dist/sweetalert2.all.min.js")"></script>
+    <script src="@Url.Content("https://cdn.jsdelivr.net/momentjs/latest/moment.min.js")"></script>
+    <script src="@Url.Content("https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js")"></script>
+    @Scripts.Render("~/Scripts/script/script.js")
+    <script>
+        //DateFilter
+        if (document.getElementById("StartDate") !== null) {
+            document.getElementById("StartDate").value = '@ViewData["MinDate"]';
+            document.getElementById("EndDate").value = '@ViewData["MaxDate"]';
+        }
+
+        $(function () {
+            $('input[name="daterange"]').daterangepicker({
+                opens: 'center',
+                "endDate": '@ViewData["MaxDate"]',
+                "minDate": '@ViewData["MinDate"]'
+            }, function (start, end, label) {
+                document.getElementById("StartDate").value = start.format('MM/DD/YYYY');
+                document.getElementById("EndDate").value = end.format('MM/DD/YYYY');
+            })
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,84 @@
+﻿@model VeronaTour.WEB.Models.UsersViewModel
+@{
+    ViewBag.Title = "User";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>Users list</h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="@Url.Action("Index", "Admin")">
+                <i class="fa fa-dashboard"></i> Home
+            </a>
+        </li>
+        <li class="active">Users list</li>
+    </ol>
+</section>
+<!-- //Content Header -->
+<!-- Main content -->
+@if (Model.Users.Any())
+{
+    <section class="content">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box">
+                    <div class="box-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>ID user</th>
+                                        <th>Name</th>
+                                        <th>Phone</th>
+                                        <th>Email</th>
+                                        <th>Role</th>
+                                        <th class="text-center">Block</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var user in Model.Users)
+                                    {
+                                        <tr>
+                                            <td>@user.Id</td>
+                                            <td>@user.Name</td>
+                                            <td>@user.PhoneNumber</td>
+                                            <td>@user.Email</td>
+                                            @using (Html.BeginForm("UpdateUserSettings", "Admin", new { email = user.Email }, FormMethod.Post, new { id = "settings" + user.Id }))
+                                            {
+                                                <td class="text-center">
+                                                    <div class="form-group">
+                                                        <select name="SelectedRole" onchange="checkBlock(event, @(user.Id))">
+
+                                                            @foreach (var role in Model.Roles)
+                                                            {
+                                                                <option @((role == user.Role) ? "selected" : "")>@role</option>
+                                                            }
+                                                        </select>
+                                                    </div>
+                                                </td>
+                                                <td class="text-center">
+                                                    <input type="checkbox" name="IsBlocked" id="IsBlocked" onchange="checkBlock(event, @(user.Id))" @(user.IsBlocked ? "checked" : "unchecked") />
+                                                </td>
+                                            }
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+}
+else
+{
+    <h3 class="text-center">This list is empty.</h3>
+}
+<!-- //content -->
+@using (Html.BeginForm("BlockUser", "Admin", FormMethod.Post, new { id = "blockUser" }))
+{
+    @Html.Hidden("userId", 0);
+}

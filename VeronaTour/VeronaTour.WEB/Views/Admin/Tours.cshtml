@@ -1,0 +1,98 @@
+﻿@model IEnumerable<VeronaTour.BLL.DTOs.TourDTO>
+@{
+    ViewBag.Title = "Tours";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        Tours list
+    </h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="@Url.Action("Index", "Admin")">
+                <i class="fa fa-dashboard"></i> Home
+            </a>
+        </li>
+        <li class="active">Tours list</li>
+    </ol>
+</section>
+<!-- //Content Header -->
+<!-- Main content -->
+@if (Model.Any())
+{
+    <section class="content">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box">
+                    <div class="box-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>ID tour</th>
+                                        <th>Title</th>
+                                        <th>Country</th>
+                                        <th>Price for one</th>
+                                        <th>Hotel</th>
+                                        <th>Date</th>
+                                        <th>Count</th>
+                                        <th>Status</th>
+                                        <th>Is hot</th>
+                                        <th class="text-center">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var tour in Model)
+                                    {
+                                        <tr class="@((tour.IsDeleted == true) ? "canceled-row": (tour.CountOfTour<=0) ? "primary-row":"") ">
+                                            <td>@tour.Id</td>
+                                            <td>@tour.Title</td>
+                                            <td>@tour.Country.Title</td>
+                                            <td>@tour.Price$</td>
+                                            <td>@tour.Hotel.Title</td>
+                                            <td>@tour.StartDate.ToShortDateString()-@tour.EndDate.ToShortDateString()</td>
+                                            <td>@tour.CountOfTour</td>
+                                            @if (tour.IsDeleted == true)
+                                            {
+                                                <td>Deleted</td>
+                                            }
+                                            else
+                                            {
+                                                <td>Active</td>
+                                            }
+                                            <td>
+                                                <input type="checkbox" onclick="checkHot(event, @(tour.Id))" @(tour.HotTour ? "checked" : "unchecked") />
+                                            </td>
+                                            <td class="text-center">
+                                                <a href="@Url.Action("DetailsTour", "Admin" , new { id=@tour.Id })" style="font-size:20px;">
+                                                    <i class="fa fa-fw fa-eye"></i>
+                                                </a> or
+                                                <a href="@Url.Action("EditTour", "Admin" , new { id=@tour.Id })" style="font-size:20px;">
+                                                    <i class="fa fa-fw fa-pencil"></i>
+                                                </a> or
+                                                <a href="@Url.Action("DeleteTour", "Admin" , new { id=@tour.Id })" class="delete" style="font-size:20px;">
+                                                    <i class="fa fa-fw fa-close text-danger"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+}
+else
+{
+    <h3 class="text-center">This list is empty.</h3>
+}
+@using (Html.BeginForm("ChangeHot", "Admin", FormMethod.Post, new { id = "sendTour" }))
+{
+    @Html.Hidden("tourId", 0);
+}
+<!-- //content -->

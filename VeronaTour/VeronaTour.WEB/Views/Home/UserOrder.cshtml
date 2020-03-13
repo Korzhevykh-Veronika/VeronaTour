@@ -1,0 +1,93 @@
+﻿@using VeronaTour.WEB.Models;
+@model OrdersViewModel
+
+<!-- banner -->
+<div class="banner_inner">
+    <div class="services-breadcrumb">
+        <div class="inner_breadcrumb">
+            <ul class="short">
+                <li>
+                    @Html.ActionLink("Home", "Index", "Home")
+                    <i>|</i>
+                </li>
+                <li>
+                    @Html.ActionLink("Profile", "Profile", "Home")
+                    <i>|</i>
+                </li>
+                <li>History of orders</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!--//banner -->
+<!-- UserOrder table -->
+<div class="container">
+    <div class="prdt-top">
+        <div class="col-md-12 prdt-left">
+            @if (Model.RegisteredOrder.Any())
+            {
+                <h3 style="text-align: center; margin-top: 20px">Your orders</h3>
+                <div class="table-responsive" style="margin-bottom: 50px;margin-top: 30px">
+
+                    <table class="table-hover">
+                        <thead>
+                            <tr>
+                                <th>№ order</th>
+                                <th>Title of tour</th>
+                                <th>Status</th>
+                                <th>Order date</th>
+                                <th>Edit date</th>
+                                <th>Price for one</th>
+                                <th>Number of people</th>
+                                <th>Sum</th>
+                                <th class="text-center">Tour</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var order in Model.RegisteredOrder)
+                            {
+
+                                <tr class="@((order.Status.Title == "Paid") ? "paid-row" : (order.Status.Title == "Canceled") ? "canceled-row": "") ">
+                                    <td>@order.Id</td>
+                                    <td>@order.Tour.Title</td>
+                                    <td>@order.Status.Title</td>
+                                    <td>@order.DateOrder.ToShortDateString()</td>
+                                    <td>@order.DateUpdateOrder.ToShortDateString()</td>
+                                    <td>@order.Tour.Price$</td>
+                                    <td>@order.NumberOfPeople</td>
+                                    <td>@(order.Tour.Price * order.NumberOfPeople)</td>
+                                    <td class="text-center">
+                                        <a href="@Url.Action("Details", "Home", new { id=@order.Id })">
+                                            <i class="fa fa-fw fa-eye" style="color: #ff4e00"></i>
+                                        </a>
+                                    </td>
+
+                                </tr>
+
+                            }
+                            <tr>
+                                <td>Total count:</td>
+                                <td colspan="9" class="text-right cart-qty">@Model.RegisteredOrder.Count()</td>
+                            </tr>
+                            <tr>
+                                <td>Sale</td>
+                                <td colspan="9" class="text-right cart-qty">@Model.Sale %</td>
+                            </tr>
+                            <tr>
+                                <td>Total:</td>
+                                <td colspan="9" class="text-right cart-sum">@Convert.ToInt32(Model.TotalPrice * (1.0 - (double)@Model.Sale / 100))$</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-danger" style="margin-bottom: 40px">
+                    You have not made orders yet ...
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<!-- //UserOrder table -->

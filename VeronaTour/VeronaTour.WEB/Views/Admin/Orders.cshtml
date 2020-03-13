@@ -1,0 +1,79 @@
+﻿@using VeronaTour.WEB.Models;
+@model OrdersViewModel
+
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        Order list
+    </h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="@Url.Action("Index", "Admin")">
+                <i class="fa fa-dashboard"></i> Home
+            </a>
+        </li>
+        <li class="active">Orders list</li>
+    </ol>
+</section>
+<!-- //Content Header -->
+<!-- Main content -->
+@if (Model.RegisteredOrder.Any())
+{
+    <section class="content">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box">
+                    <div class="box-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>№ order</th>
+                                        <th>Customer</th>
+                                        <th>Title of tour</th>
+                                        <th>Status</th>
+                                        <th>Number of people</th>
+                                        <th>Order date</th>
+                                        <th>Edit date</th>
+                                        <th>Sum</th>
+                                        <th class="text-center">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var order in Model.RegisteredOrder)
+                                    {
+
+                                        <tr class="@((order.Status.Title == "Paid") ? "paid-row" : (order.Status.Title == "Canceled") ? "canceled-row": "") ">
+                                            <td>@order.Id</td>
+                                            <td>@order.User.Name</td>
+                                            <td>@order.Tour.Title</td>
+                                            <td>@order.Status.Title</td>
+                                            <td>@order.NumberOfPeople</td>
+                                            <td>@order.DateOrder.ToShortDateString()</td>
+                                            <td>@order.DateUpdateOrder.ToShortDateString()</td>
+                                            <td>@(order.Tour.Price * order.NumberOfPeople)$</td>
+                                            <td class="text-center">
+                                                <a href="@Url.Action("DetailsOrder", "Admin" , new { id=@order.Id })" style="font-size:20px;">
+                                                    <i class="fa fa-fw fa-eye"></i>
+                                                </a> 
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+}
+else
+{
+    <h3 class="text-center">This list is empty</h3>
+}
+<!-- //content -->

@@ -1,0 +1,95 @@
+﻿@using VeronaTour.WEB.Models;
+@model DetailsViewModel
+
+<!-- banner -->
+<div class="banner_inner">
+    <div class="services-breadcrumb">
+        <div class="inner_breadcrumb">
+            <ul class="short">
+                <li>
+                    @Html.ActionLink("Tour Search", "Tours", "Home")
+                    <i>|</i>
+                </li>
+                <li>Tour description</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!-- //banner -->
+<!--Details of tour-->
+<section class="banner-bottom-wthreelayouts py-lg-5 py-3">
+    <div class="container">
+        <div class="inner-sec-shop pt-lg-4 pt-3">
+            <div class="row">
+                <div class="col-lg-4 single-right-left ">
+                    <div class="grid images_3_of_2">
+                        <div class="thumb-image">
+                            @Html.Raw("<img id=\"base-img\" class=\"img-fluid\" alt=\"Image of tour description\"  src=\"data:image/jpeg;base64,"
+                                   + Convert.ToBase64String(Model.Tour.Image) + "\" />")
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-8 single-right-left simpleCart_shelfItem">
+                    <h1 style="color: orangered">@Model.Tour.Title</h1>
+                    @if (Model.Tour.HotTour == true)
+                    {
+                        <span class="hot-tour col-sm-2 mb-5">Hot Tour</span>
+                    }
+                    <p>
+                        <span class="item_price" id="base-price" data-base="@Model.Tour.Price"> @Model.Tour.Price$ for one</span>
+                        <br>
+                        <span><strong>Country:</strong> @Model.Tour.Country.Title </span>
+                    </p>
+                    <div class="responsive_tabs" style="margin-top: 15px;">
+                        <div id="horizontalTab">
+                            <ul class="resp-tabs-list">
+                                <li>Tour</li>
+                                <li>Description</li>
+                            </ul>
+                            <div class="resp-tabs-container">
+                                <div class="tab1">
+                                    <div class="single_page">
+                                        <ul class="dotted">
+                                            <li><span>Tour Type</span><span>@Model.Tour.Type.Title</span></li>
+                                            <li><span>Hotel</span><span>@Model.Tour.Hotel.Title*@Model.Tour.Hotel.StarsCount</span></li>
+                                            <li><span>Food</span><span>@Model.Tour.FeedingType.Title</span></li>
+                                            <li><span>Date</span><span>@Model.Tour.StartDate.ToShortDateString()-@Model.Tour.EndDate.ToShortDateString()</span></li>
+                                            <li><span>Number of nights</span><span>@((Model.Tour.EndDate - Model.Tour.StartDate).TotalDays - 1) days</span></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="tab2">
+                                    <div class="single_page">
+                                        <ul>
+                                            <li><span><strong>Hotel Description:</strong></span><span>@Model.Tour.Hotel.Description</span></li>
+                                            <li><span><strong>Tour Description:</strong></span><span>@Model.Tour.Description</span></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 10px"><h5>Count of tours: <span id="base-nal"> @Model.Tour.CountOfTour</span> tours</h5> </div>
+                    <div style="margin-top: 10px"><h5>Number of people: <span id="base-nal"> @Model.Tour.MinPeopleCount-@Model.Tour.MaxPeopleCount</span> people</h5> </div>
+                    @using (Html.BeginForm("Details", "Home", null, FormMethod.Post, new { id = "add-form" }))
+                    { 
+                        @Html.HiddenFor(model=>model.Tour.Id)
+                        <div class="quantity">
+                            <label for="quality" style="float: left; font-size: 18px; margin: 5px 15px 0 0; ">Amount you need:</label>
+                            <input id="quality" type="number" max="@Model.Tour.MaxPeopleCount" min="@Model.Tour.MinPeopleCount" class="form-control" style=" margin: 20px 20px 20px 0;width: 80px;" size="4" value="@Model.Tour.MinPeopleCount" onkeypress="return false" name="NumberOfPeople" step="1">
+                        </div>
+                        if (User.Identity.IsAuthenticated)
+                        {
+                            <button type="button" class="add-to-cart-link btncart btn-sm btnsuccess " onclick="showSuccessAlert()">Add to cart</button>
+                        }
+                        else
+                        {
+                            <button type="button" class="add-to-cart-link btncart btn-sm btnnotsuccess" onclick="showRegistrationAlert()">Add to cart</button>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!--//Details of tour-->

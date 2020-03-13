@@ -1,0 +1,62 @@
+﻿@model VeronaTour.BLL.DTOs.SaleSettingsDTO
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        Sale settings
+    </h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="@Url.Action("Index", "Admin")">
+                <i class="fa fa-dashboard"></i> Home
+            </a>
+        </li>
+        <li class="active">Sale settings</li>
+    </ol>
+</section>
+<!-- //Content Header -->
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box">
+                @using (Html.BeginForm("Sale", "Admin", FormMethod.Post, new { id = "add" }))
+                {
+                    @Html.AntiForgeryToken()
+                    foreach (ModelState modelState in ViewData.ModelState.Values)
+                    {
+                        foreach (ModelError error in modelState.Errors)
+                        {
+                            <p class="text-danger font-weight-bold text-center ">@error.ErrorMessage</p>
+                        }
+                    }
+                    <div class="box-body ">
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                @Html.LabelFor(model => model.MaxSale, htmlAttributes: new { @class = " col-form-label-lg" })
+                                <div class="slidecontainer">
+                                    @Html.EditorFor(model => model.MaxSale, new { htmlAttributes = new { @type = "range", @min = "0", @max = "100", @Value = Model.MaxSale, @class = "slider", id = "maxSale" } })
+                                    <h5><strong>Value:</strong> <span id="demo1"></span>%</h5>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                @Html.LabelFor(model => model.SaleStep, htmlAttributes: new { @class = " col-form-label-lg" })
+                                <div class="slidecontainer">
+                                    @Html.EditorFor(model => model.SaleStep, new { htmlAttributes = new { @type = "range", @min = "0", @max = "100", @Value = Model.SaleStep, @class = "slider", id = "saleStep" } })
+                                    <h5><strong>Value:</strong> <span id="demo2"></span>%</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box-footer">
+                        <button type="submit" class="btn btn-success">Add sale settings</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</section>
+<!-- //content -->

@@ -1,0 +1,119 @@
+﻿@model VeronaTour.BLL.DTOs.OrderDTO
+
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        Order № @Model.Id
+        @if (Model.Status.Title == "Registered")
+        {
+            @Html.ActionLink("Paid", "ChangeOrderStatus", "Admin", new { orderId = @Model.Id, status = "Paid" }, new { @class = "btn btn-success btn-xs" })
+
+            @Html.ActionLink("Canceled", "ChangeOrderStatus", "Admin", new { orderId = @Model.Id, status = "Canceled" }, new { @class = "btn btn-default btn-xs" })
+        }
+    </h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="@Url.Action("Index", "Admin")">
+                <i class="fa fa-dashboard"></i> Home
+            </a>
+        </li>
+        <li>
+            <a href="@Url.Action("Orders", "Admin")">
+                <i class="fa fa-dashboard"></i> Orders list
+            </a>
+        </li>
+        <li class="active">Order №@Model.Id</li>
+    </ol>
+</section>
+<!-- //Content Header -->
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box">
+                <div class="box-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover">
+                            <tbody>
+                                <tr>
+                                    <td>Order number</td>
+                                    <td>@Model.Id</td>
+                                </tr>
+                                <tr>
+                                    <td>Order date</td>
+                                    <td>@Model.DateOrder.ToShortDateString()</td>
+                                </tr>
+                                <tr>
+                                    <td>Date of edit</td>
+                                    <td>@Model.DateUpdateOrder.ToShortDateString()</td>
+                                </tr>
+                                <tr>
+                                    <td>Order price</td>
+                                    <td>@(Model.Tour.Price * Model.NumberOfPeople)$</td>
+                                </tr>
+                                <tr>
+                                    <td>Customer Name</td>
+                                    <td>@Model.User.Name</td>
+                                </tr>
+                                <tr>
+                                    <td>Customer Phone</td>
+                                    <td>@Model.User.PhoneNumber</td>
+                                </tr>
+                                <tr>
+                                    <td>Status</td>
+                                    <td>@Model.Status.Title</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <h3>Tours</h3>
+            <div class="box">
+                <div class="box-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>ID tour</th>
+                                    <th>Title of tour</th>
+                                    <th>Date of tour</th>
+                                    <th>Price for one</th>
+                                    <th>Number of people</th>
+                                    <th>Sum</th>
+                                    <th>Sale</th>
+                                    <th>Total price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>@Model.Tour.Id</td>
+                                    <td>@Html.ActionLink(@Model.Tour.Title, "DetailsTour", "Admin", new { id = @Model.Tour.Id }, null)</td>
+                                    <td>@Model.Tour.StartDate.ToShortDateString()-@Model.Tour.EndDate.ToShortDateString()</td>
+                                    <td>@Model.Tour.Price $</td>
+                                    <td>@Model.NumberOfPeople</td>
+                                    <td>@(Model.Tour.Price * Model.NumberOfPeople)$</td>
+                                    @if (Model.Status.Title == "Paid")
+                                    {
+                                        <td>@Model.FinalSale %</td>
+
+                                    }
+                                    else
+                                    {
+                                        <td>@Model.User.Sale %</td>
+                                    }
+                                    <td>@Convert.ToInt32(Model.Tour.Price * Model.NumberOfPeople * (1.0 - (double)@Model.User.Sale / 100))$</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- //content -->

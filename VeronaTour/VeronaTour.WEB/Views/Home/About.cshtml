@@ -1,0 +1,81 @@
+﻿<!-- banner -->
+<div class="banner_inner">
+    <div class="services-breadcrumb">
+        <div class="inner_breadcrumb">
+            <ul class="short">
+                <li>
+                    @Html.ActionLink("Home", "Index", "Home")
+                    <i>|</i>
+                </li>
+                <li>About us</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!-- //banner -->
+<!-- top Products -->
+<section class="banner-bottom-wthreelayouts py-lg-0 py-3">
+    <div class="container-fluid">
+        <div class="inner-sec-shop px-lg-4 px-3">
+            <div class="about-content py-lg-5 py-3">
+                <div class="row">
+                    <div class="col-lg-6 p-0 mw-100 mx-auto">
+                        <img src="~/Content/images/about.jpg" alt="About us" class="img-fluid" style="height: 100%; width: 100%">
+                    </div>
+                    <div class="col-lg-6 about-info" style="height: 100%;width: 100%">
+                        <h3 class="tittle-w3layouts text-left mb-lg-2 mb-1">About us</h3>
+                        <p class="my-xl-3 my-lg-2 my-md-3 my-2" style="color: #555">
+                            Do you like to relax, travel, get bright and positive emotions?
+                            Travel agency “Verona Tour” will be happy to help you choose and organize your vacation.
+                            Our agency offers tours for every taste and wealth - from economical and standard to individual and exclusive, giving our customers the opportunity to perfectly arrange their holidays.
+                            We are equally well versed in beach vacations, ski tours, sightseeing tours, individual programs and business trips.
+                            Our managers are highly qualified specialists who are well aware of many countries and follow all the changes in popular tourist destinations, which allows us to organize the rest of our clients at the highest level.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- //top Products -->
+<!--Three qualities -->
+<div class="bottom-sub-grid-content py-lg-5 py-3">
+    <div class="row">
+        <div class="col-lg-4 bottom-sub-grid text-center">
+            <div class="bt-icon">
+                <span class="fa fa-hotel"></span>
+            </div>
+            <h4 class="sub-tittle-w3layouts my-lg-4 my-3">Hotel types </h4>
+            <p>We offer a wide selection of hotel ranging from 5-star ones to small properties located worldwide so that you could book a hotel you like.</p>
+            <p>
+                @Html.ActionLink("Tour Search", "Tours", "Home", null, new { @class = "btn btn-sm animated-button gibson-three mt-4" })
+            </p>
+        </div>
+        <div class="col-lg-4 bottom-sub-grid text-center">
+            <div class="bt-icon">
+                <span class="fa fa-sliders"></span>
+            </div>
+            <h4 class="sub-tittle-w3layouts my-lg-4 my-3">Modern algorithms</h4>
+            <p>
+                Our unique matching system lets you find just the tour you want for your next holiday.
+            </p>
+            <p>
+                @Html.ActionLink("Tour Search", "Tours", "Home", null, new { @class = "btn btn-sm animated-button gibson-three mt-4" })
+            </p>
+
+        </div>
+        <div class="col-lg-4 bottom-sub-grid text-center">
+            <div class="bt-icon">
+                <span class="fa fa-ship"></span>
+            </div>
+            <h4 class="sub-tittle-w3layouts my-lg-4 my-3">Types of Tours </h4>
+            <p>
+                Our agency provides varied tours including tailored summer tours or excursions for clients who are searching for an exclusive and memorable vacation.
+            </p>
+            <p>
+                @Html.ActionLink("Tour Search", "Tours", "Home", null, new { @class = "btn btn-sm animated-button gibson-three mt-4" })
+            </p>
+        </div>
+    </div>
+</div>
+<!-- //Three qualities -->

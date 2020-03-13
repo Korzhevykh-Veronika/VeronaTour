@@ -1,0 +1,118 @@
+﻿@model VeronaTour.WEB.Models.AddTourViewModel
+
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>New tour </h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="@Url.Action("Index", "Admin")">
+                <i class="fa fa-dashboard"></i> Home
+            </a>
+        </li>
+        <li>
+            <a href="@Url.Action("Tours", "Admin")">
+                <i class="fa fa-dashboard"></i> Tours list
+            </a>
+        </li>
+        <li class="active">New tour</li>
+    </ol>
+</section>
+<!-- //Content Header -->
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box">
+                @using (Html.BeginForm("CreateTour", "Admin", FormMethod.Post, new { id = "add", enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+                    foreach (ModelState modelState in ViewData.ModelState.Values)
+                    {
+                        foreach (ModelError error in modelState.Errors)
+                        {
+                            <p class="text-danger font-weight-bold text-center ">@error.ErrorMessage</p>
+                        }
+                    }
+            <div class="box-body">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Tour.Title, htmlAttributes: new { @class = " col-form-label-lg" })
+                    @Html.EditorFor(model => model.Tour.Title, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Tour.Title, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.SelectedTourType, htmlAttributes: new { @class = "col-form-label-lg" })
+                    <a href="@Url.Action( "AddTourType", "Admin")" class="btn "><i class="fa fa-fw fa-plus" style="font-size: 22px"></i> </a>
+                    @Html.DropDownListFor(model => model.SelectedTourType, new SelectList(Model.TourTypeTitles), htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.SelectedTourType, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.SelectedCountry, htmlAttributes: new { @class = "col-form-label-lg" })
+                    <a href="@Url.Action( "AddCountry", "Admin")" class="btn "><i class="fa fa-fw fa-plus" style="font-size: 22px"></i> </a>
+                    @Html.DropDownListFor(model => model.SelectedCountry, new SelectList(Model.Countries), htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.SelectedCountry, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Tour.Price, htmlAttributes: new { @class = " col-form-label-lg" })
+                    @Html.EditorFor(model => model.Tour.Price, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Tour.Price, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.SelectedHotelTitle, htmlAttributes: new { @class = "col-form-label-lg" })
+                    @Html.DropDownListFor(model => model.SelectedHotelTitle, new SelectList(Model.HotelTitles), htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.SelectedHotelTitle, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.SelectedFeedingType, htmlAttributes: new { @class = "col-form-label-lg" })
+                    @Html.DropDownListFor(model => model.SelectedFeedingType, new SelectList(Model.FeedingTypes), htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.SelectedFeedingType, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group ">
+                    @Html.LabelFor(model => model.Tour.MinPeopleCount, htmlAttributes: new { @class = " col-form-label-lg" })
+                    @Html.EditorFor(model => model.Tour.MinPeopleCount, new { htmlAttributes = new { @type = "number", @min = "1", @max = "50", @Value = "1", @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Tour.MinPeopleCount, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group ">
+                    @Html.LabelFor(model => model.Tour.MaxPeopleCount, htmlAttributes: new { @class = " col-form-label-lg" })
+                    @Html.EditorFor(model => model.Tour.MaxPeopleCount, new { htmlAttributes = new { @type = "number", @min = "1", @max = "50", @Value = "1", @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Tour.MaxPeopleCount, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group ">
+                    @Html.Label("Date", htmlAttributes: new { @class = "d-block col-form-label-lg" })
+
+                    <input type="text" name="daterange" class="form-control" />
+                    @Html.HiddenFor(model => model.Tour.StartDate, new { id = "StartDate", @class = "form-control" })
+                    @Html.HiddenFor(model => model.Tour.EndDate, new { id = "EndDate", @class = "form-control" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Tour.Description, htmlAttributes: new { @class = " col-form-label-lg" })
+                    @Html.EditorFor(model => model.Tour.Description, new { htmlAttributes = new { @class = "form-control", @rows = 5 } })
+                    @Html.ValidationMessageFor(model => model.Tour.Description, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Tour.CountOfTour, htmlAttributes: new { @class = " col-form-label-lg" })
+                    @Html.EditorFor(model => model.Tour.CountOfTour, new { htmlAttributes = new { @class = "form-control", @rows = 5 } })
+                    @Html.ValidationMessageFor(model => model.Tour.CountOfTour, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    @Html.CheckBoxFor(model => model.Tour.HotTour, new { @class = "form-check-input" })
+                    @Html.Label("HotTour", htmlAttributes: new { @class = "form-check-label" })
+                </div>
+                <div class="form-group">
+                    <label for="exampleFormControlFile1">Add image</label>
+                    <input type="file" class="form-control-file" id="exampleFormControlFile1" name="uploadImage">
+                    @Html.ValidationMessageFor(model => model.uploadImage, "", new { @class = "text-danger" })
+                </div>
+            </div>
+                    <div class="box-footer">
+                        <button type="submit" class="btn btn-success">Add tour</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</section>
+<!-- //content -->

@@ -1,0 +1,68 @@
+﻿@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        Control Panel
+    </h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="@Url.Action("Index", "Admin")">
+                <i class="fa fa-dashboard"></i> Home
+            </a>
+        </li>
+    </ol>
+</section>
+<!-- //Content Header -->
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-lg-6 col-xs-6">
+            <div class="small-box bg-aqua">
+                <div class="inner">
+                    <p>New orders</p>
+                </div>
+                <div class="icon">
+                    <i class="ion ion-bag"></i>
+                </div>
+                <a href="@Url.Action("Orders", "Admin")" class="small-box-footer">All orders <i class="fa fa-arrow-circle-right"></i></a>
+            </div>
+        </div>
+        <div class="col-lg-6 col-xs-6">
+            <div class="small-box bg-green">
+                <div class="inner">
+                    <p>Tours</p>
+                </div>
+                <div class="icon">
+                    <i class="ion ion-stats-bars"></i>
+                </div>
+                <a href="@Url.Action("Tours", "Admin")" class="small-box-footer">All tours <i class="fa fa-arrow-circle-right"></i></a>
+            </div>
+        </div>
+        <div class="col-lg-6 col-xs-6">
+            <div class="small-box bg-yellow">
+                <div class="inner">
+                    <p>Users</p>
+                </div>
+                <div class="icon">
+                    <i class="ion ion-person-add"></i>
+                </div>
+                <a href="@Url.Action("Users", "Admin")" class="small-box-footer">All users<i class="fa fa-arrow-circle-right"></i></a>
+            </div>
+        </div>
+        <div class="col-lg-6 col-xs-6">
+            <div class="small-box bg-red">
+                <div class="inner">
+                    <p>Hotel</p>
+                </div>
+                <div class="icon">
+                    <i class="ion ion-pie-graph"></i>
+                </div>
+                <a href="@Url.Action("Hotels", "Admin")" class="small-box-footer">All hotels<i class="fa fa-arrow-circle-right"></i></a>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- //content -->

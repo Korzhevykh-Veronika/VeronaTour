@@ -1,0 +1,171 @@
+﻿@model VeronaTour.WEB.Models.ToursViewModel
+@using VeronaTour.WEB.Helpers;
+
+<!-- banner -->
+<div class="banner_inner">
+    <div class="services-breadcrumb">
+        <div class="inner_breadcrumb">
+            <ul class="short">
+                <li>
+                    @Html.ActionLink("Home", "Index", "Home")
+                    <i>|</i>
+                </li>
+                <li>Tours</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!--//banner -->
+<!--/Tours-->
+<section class="banner-bottom-wthreelayouts py-lg-5 py-3">
+    <!--Filtres-->
+    <div class="search-form p-5  mw-100 mb-5">
+        <h3 class="text-center mb-3 ">Search Tour</h3>
+        @using (Html.BeginForm("Tours", "Home", FormMethod.Get, new { @id = "FindATour" }))
+        {
+            <div class="form-row">
+                <div class="form-group col-md-3">
+                    @Html.Label("Type of tour", htmlAttributes: new { @class = "col-form-label-lg" })
+                    @Html.DropDownListFor(model => model.FilterOptions.SelectedTourType, new SelectList(Model.TourTypeTitles), htmlAttributes: new { @class = "form-control" })
+                </div>
+
+                <div class="form-group col-md-3">
+                    @Html.Label("Country", htmlAttributes: new { @class = "col-form-label-lg" })
+                    @Html.DropDownListFor(model => model.FilterOptions.SelectedCountry, new SelectList(Model.Countries), htmlAttributes: new { @class = "form-control" })
+                </div>
+                <div class="form-group col-md-3 ">
+                    @Html.Label("Date", htmlAttributes: new { @class = "d-block col-form-label-lg" })
+                    <input type="text" name="daterange" class="form-control" />
+                    @Html.HiddenFor(model => model.FilterOptions.SelectedStartDate, new { id = "StartDate", @class = "form-control" })
+                    @Html.HiddenFor(model => model.FilterOptions.SelectedEndDate, new { id = "EndDate", @class = "form-control" })
+                    @Html.HiddenFor(model => model.FilterOptions.SelectedPage, new { id = "SelectedPage", @Value = Model.FilterOptions.SelectedPage })
+                </div>
+                <div class="form-group col-md-3 ">
+                    @Html.Label("Number of people", htmlAttributes: new { @class = " col-form-label-lg" })
+                    @Html.EditorFor(model => model.FilterOptions.SelectedNumberOfPeople, new { htmlAttributes = new { @type = "number", @min = "0", @max = @Model.MaxCountOfPeople, @Value = Model.FilterOptions.SelectedNumberOfPeople, @class = "form-control" } })
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-4 ">
+                    @Html.Label("Food", htmlAttributes: new { @class = " d-block col-form-label-lg" })
+
+                    @for (int foodIndex = 0; foodIndex < Model.FeedingTypes.Count; foodIndex++)
+                    {
+                        <div class="form-check form-check-inline">
+                            @Html.CheckBoxFor(model => model.FilterOptions.CheckedFood[foodIndex], new { @class = "form-check-input" })
+                            @Html.Label(Model.FeedingTypes[foodIndex].Title, htmlAttributes: new { @class = "form-check-label" })
+
+                        </div>
+                    }
+                </div>
+                <div class="form-group col-md-4 ">
+                    @Html.Label("Price for one", htmlAttributes: new { @class = " col-form-label-lg" })
+                    <div class="slidecontainer mt-2 mr-0">
+                        @Html.EditorFor(model => model.FilterOptions.SelectedPrice, new { htmlAttributes = new { @type = "range", @min = @Model.MinPrice, @max = @Model.MaxPrice, @Value = @Model.FilterOptions.SelectedPrice, @class = "slider", id = "myRange" } })
+                        <h5><strong>To:</strong> <span id="demo"></span>$</h5>
+                    </div>
+                </div>
+                <div class="form-group col-md-4 ">
+                    @Html.Label("Hotel Category", htmlAttributes: new { @class = " d-block col-form-label-lg" })
+                    @for (var star = 1; star <= Model.MaxCountOfStartForHotel; star++)
+                    {
+                        <div class="form-check form-check-inline">
+                            @Html.CheckBoxFor(model => model.FilterOptions.CheckedHotel[star - 1], new { @class = "form-check-input" })
+                            @Html.Label(@star.ToString(), htmlAttributes: new { @class = "form-check-label" })
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="col-md-12 text-center">
+                <button type="submit" class="btn btn-success btn-lg m-auto">
+                    Find a tour
+                </button>
+                <button type="button" onclick="ResetFilters()" class="btn btn btn-warning btn-lg m-auto">
+                    Reset
+                </button>
+            </div>
+        }
+    </div>
+    <!-- //Filtres-->
+    <!--Cart-->
+    @if (Model.PageInfo.TotalItems == 0)
+    {
+        <h3 class="text-center m-5">
+            На данный момент товаров данной категории нет
+        </h3>
+    }
+    else
+    {
+        <div class="container-fluid">
+            <div class="row wrapper_top_shop">
+                @foreach (var tour in Model.Tours)
+                {
+                    <div class=" col-lg-4 col-md-6 col-sm-12 @*product-men women_two shop-gd*@ d-flex ">
+                        <div class="product-googles-info googles " style="background-color: white; margin-bottom: 20px">
+                            <div class="men-pro-item">
+                                <div class="men-thumb-item">
+                                    @Html.Raw("<img class=\"img-fluid\" alt=\"Image of Tour\"  src=\"data:image/jpeg;base64,"
+                                    + Convert.ToBase64String(tour.Image) + "\" />")
+                                    <div class="men-cart-pro">
+                                        <div class="inner-men-cart-pro">
+                                            @Html.ActionLink("More details", "Details", "Home", new
+                                            {
+                                                id = tour.Id
+                                                }, new { @class = "link-product-add-cart" })
+                                        </div>
+                                    </div>
+                                    @if (tour.HotTour == true)
+                                    {
+                                        <span class="product-new-top">Hot Tour</span>
+                                    }
+                                </div>
+                                <div class="item-info-product">
+                                    <div class="info-product-price">
+                                        <div class="grid_meta">
+                                            <div class="product_price">
+                                                <h3>
+                                                    @Html.ActionLink(@tour.Title, "Details", "Home", new { id = tour.Id }, new { @style = "color:Red" })
+                                                </h3>
+                                                <p>
+                                                    <strong>
+                                                        Country:
+                                                    </strong>
+                                                    @tour.Country.Title
+                                                    <br />
+                                                    <strong>
+                                                        Hotel:
+                                                    </strong>
+                                                    @tour.Hotel.Title*@tour.Hotel.StarsCount
+                                                    <br />
+                                                    <strong>
+                                                        Food:
+                                                    </strong>
+                                                    @tour.FeedingType.Title
+                                                    <br />
+                                                    <strong>@tour.Description</strong>
+                                                </p>
+                                                <div class="grid-price mt-2">
+                                                    <span class="money ">@tour.Price $ for one</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+    <!--//Cart-->
+    <!--Pagination-->
+    @if (Model.PageInfo.TotalItems > Model.PageInfo.PageSize)
+    {
+        <p class="d-flex flex-row justify-content-center w-50 ml-auto mr-auto m-3">
+            @Html.PageLinks(Model.PageInfo)
+        </p>
+    }
+    <!-- //Pagination-->
+</section>
+<!--//Tours-->

@@ -1,0 +1,88 @@
+﻿@model IEnumerable<VeronaTour.BLL.DTOs.HotelDTO>
+@{
+    ViewBag.Title = "Hotels";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        Hotels list
+    </h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="@Url.Action("Index", "Admin")">
+                <i class="fa fa-dashboard"></i> Home
+            </a>
+        </li>
+        <li class="active">Hotels list</li>
+    </ol>
+</section>
+<!-- //Content Header -->
+<!-- Main content -->
+@if (Model.Any())
+{
+    <section class="content">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box">
+                    <div class="box-body">
+                        @foreach (ModelState modelState in ViewData.ModelState.Values)
+                        {
+                            foreach (ModelError error in modelState.Errors)
+                            {
+                                <h4 class="text-danger font-weight-bold text-center ">@error.ErrorMessage</h4>
+                            }
+                        }
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>ID hotel</th>
+                                        <th>Title</th>
+                                        <th width="50%">Description</th>
+                                        <th>Stars count</th>
+                                        <th>Status</th>
+                                        <th class="text-center">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var hotel in Model)
+                                    {
+                                        <tr class="@((hotel.IsDeleted == true) ? "canceled-row": "") ">
+                                            <td>@hotel.Id</td>
+                                            <td>@hotel.Title</td>
+                                            <td>@hotel.Description</td>
+                                            <td>@hotel.StarsCount</td>
+                                            @if (hotel.IsDeleted == true)
+                                            {
+                                                <td>Deleted</td>
+                                            }
+                                            else
+                                            {
+                                                <td>Active</td>
+                                            }
+                                            <td class="text-center">
+                                                <a href="@Url.Action("EditHotel", "Admin" , new { id=@hotel.Id })" style="font-size:20px;">
+                                                    <i class="fa fa-fw fa-pencil"></i>
+                                                </a> or
+                                                <a href="@Url.Action("DeleteHotel", "Admin" , new { id=@hotel.Id })" class="delete" style="font-size:20px;">
+                                                    <i class="fa fa-fw fa-close text-danger"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+}
+else
+{
+    <h3 class="text-center">This list is empty.</h3>
+}
+<!-- //content -->

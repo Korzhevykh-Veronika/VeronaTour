@@ -1,0 +1,129 @@
+﻿@using VeronaTour.WEB.Models;
+@model NotRegisteredOrdersViewModel
+
+<!-- banner -->
+<div class="banner_inner">
+    <div class="services-breadcrumb">
+        <div class="inner_breadcrumb">
+            <ul class="short">
+                <li>
+                    @Html.ActionLink("Tour Search", "Tours", "Home")
+                    <i>|</i>
+                </li>
+                <li>Checkout</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!--//banner -->
+<!--Orders table-->
+<div class="prdt">
+    <div class="container">
+        <div class="prdt-top">
+            <div class="col-md-12">
+                <div class="product-one cart">
+                    @if (ViewData["OrderRegistrationStatus"] != null && ViewData["OrderRegistrationStatus"] == "success")
+                    {
+                        <div class="alert alert-success " style=" margin-top: 50px; margin-bottom: 50px">
+                            <h3>Your orders have been successfully registered!</h3>
+                        </div>
+                    }
+                    else
+                    {
+                        if (ViewData["OrderRegistrationStatus"] != null && ViewData["OrderRegistrationStatus"] == "failure")
+                        {
+
+                            foreach (ModelState modelState in ViewData.ModelState.Values)
+                            {
+                                foreach (ModelError error in modelState.Errors)
+                                {
+                                    <div class="col-md-12">
+                                        <div class="alert alert-danger">
+                                            <h5 class="text-danger font-weight-bold text-center ">@error.ErrorMessage</h5>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        }
+                        if (Model.NotRegisteredOrder.Any())
+                        {
+                            <div class="register-top heading text-center" style="margin-bottom: 30px;margin-top: 20px">
+                                <h3 class="tittle-w3layouts text-center m-3">Orders</h3>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Title</th>
+                                            <th>Country</th>
+                                            <th>Hotel</th>
+                                            <th>Date</th>
+                                            <th>Number of people</th>
+                                            <th>Price for one</th>
+                                            <th><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var order in Model.NotRegisteredOrder)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    @Html.ActionLink(order.Tour.Title, "Details", "Home", new { id = order.Tour.Id }, new { @class = "s10" })
+                                                </td>
+                                                <td>@order.Tour.Country.Title</td>
+                                                <td>@order.Tour.Hotel.Title</td>
+                                                <td>@order.Tour.StartDate.ToShortDateString()-@order.Tour.EndDate.ToShortDateString()</td>
+                                                <td>@order.NumberOfPeople people </td>
+                                                <td>@order.Tour.Price$ </td>
+                                                <td>
+                                                    <a href="@Url.Action("DeleteOrder", "Home", new { id=@order.OrderId })" class="add-to-cart-link" style="color: dimgrey; font-size:34px;">
+                                                        <span class="glyphicon glyphicon-remove text-danger del-item" aria-hidden="true" style="cursor: pointer;"> <i class="fa fa-times" aria-hidden="true"></i></span>
+                                                    </a>
+                                                </td>
+                                            </tr>
+
+                                        }
+                                        <tr>
+                                            <td>Total count:</td>
+                                            <td colspan="6" class="text-right cart-qty">@Model.NotRegisteredOrder.Count()</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Sale</td>
+                                            <td colspan="6" class="text-right cart-qty">@Model.Sale %</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Total:</td>
+                                            <td colspan="6" class="text-right cart-sum">@Convert.ToInt32(Model.TotalPrice * (1.0 - (double)@Model.Sale / 100))</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-md-12 ">
+                                <div class="wrap" style=" margin-top: 50px; margin-bottom: 50px">
+                                    <div class="login p-5 bg-dark mx-auto mw-100">
+                                        <h3 class="text-center mb-3 text-white">Checkout</h3>
+                                        @using (Html.BeginForm("OrderPost", "Home", FormMethod.Post, new { id = "add-orders" }))
+                                        {
+                                            <div class="text-center  " style="text-transform: uppercase; color: #ff5500;font-size:20px">Our manager will call you back to clarify the details on the number that you indicated during registration.</div>
+
+                                            <div class="col-md-12 text-center">
+                                                <button type="submit" class="btn btn-primary submit mb-2 mt-2 ">Checkout</button>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="alert alert-danger " style=" margin-top: 50px; margin-bottom: 50px">
+                                <h3>There are no orders</h3>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- //Orders table-->
