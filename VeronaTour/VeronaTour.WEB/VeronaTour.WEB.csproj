@@ -8162,6 +8162,7 @@
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\Error404.cshtml" />
     <Content Include="Views\Shared\Error403.cshtml" />
+    <Content Include="Views\Shared\Error502.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
