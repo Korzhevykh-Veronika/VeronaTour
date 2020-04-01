@@ -7,13 +7,8 @@
     <title>VT Admin</title>
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 
-    <link href="@Url.Content("~/Content/AdminLTE/bower_components/bootstrap/dist/css/bootstrap.min.css")" rel='stylesheet' />
-    <link href="@Url.Content("~/Content/AdminLTE/bower_components/select2/dist/css/select2.min.css")" rel='stylesheet' />
-    <link href="@Url.Content("~/Content/AdminLTE/bower_components/font-awesome/css/font-awesome.min.css")" rel='stylesheet' />
-    <link href="@Url.Content("~/Content/AdminLTE/bower_components/Ionicons/css/ionicons.min.css")" rel='stylesheet' />
-    <link href="@Url.Content("~/Content/AdminLTE/dist/css/AdminLTE.min.css")" rel='stylesheet' />
-    <link href="@Url.Content("~/Content/AdminLTE/dist/css/skins/_all-skins.min.css")" rel='stylesheet' />
-    <link href="@Url.Content("~/Content/AdminLTE/style.css")" rel="stylesheet" />
+    @Styles.Render("~/Content/AdminLTE")
+
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 
 </head>
@@ -71,7 +66,7 @@
                     </div>
                     <div class="pull-left info">
                         <div>@ViewData["UserName"]</div>
-                        <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+
                     </div>
                 </div>
                 <ul class="sidebar-menu" data-widget="tree">
@@ -125,6 +120,11 @@
                             <i class="fa fa-percent"></i> <span>Sale Settings</span>
                         </a>
                     </li>
+                    <li>
+                        <a href="@Url.Action("Logs", "Admin")">
+                            <i class="fa fa-cogs"></i> <span>Logs list</span>
+                        </a>
+                    </li>
                 </ul>
             </section>
         </aside>
@@ -133,19 +133,13 @@
         </div>
     </div>
 
-
-    @Scripts.Render("~/Content/AdminLTE/bower_components/jquery/dist/jquery.min.js")
-    @Scripts.Render("~/Content/AdminLTE/bower_components/bootstrap/dist/js/bootstrap.min.js")
-    @Scripts.Render("~/Content/AdminLTE/bower_components/select2/dist/js/select2.full.js")
-    @Scripts.Render("~/Content/AdminLTE/dist/js/adminlte.min.js")
-    @Scripts.Render("~/Content/AdminLTE/bower_components/ckeditor/ckeditor.js")
-    @Scripts.Render("~/Content/AdminLTE/bower_components/ckeditor/adapters/jquery.js")
+    @Scripts.Render("~/bundles/AdminLTE")
     @Scripts.Render("~/bundles/jqueryval")
     <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-
     @Scripts.Render("~/Scripts/script/admin-js.js")
+
     <script>
 
         //DateFilter

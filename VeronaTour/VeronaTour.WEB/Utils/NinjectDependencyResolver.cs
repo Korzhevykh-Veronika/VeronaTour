@@ -5,9 +5,13 @@ using System.Web.Mvc;
 
 namespace Homework_mvc.Util
 {
+    /// <summary>
+    ///     Manager of IKernel - a super-factory that can create objects of all kinds of bindings
+    /// </summary>
     public class NinjectDependencyResolver : IDependencyResolver
     {
         private IKernel kernel;
+
         public NinjectDependencyResolver(IKernel newKernel)
         {
             kernel = newKernel;

@@ -11,8 +11,15 @@ using VeronaTour.DAL.Entites;
 
 namespace VeronaTour.BLL.Configuration
 {
+    /// <summary>
+    ///     Configures application on startup
+    /// </summary>
     public class StartupConfiguration
     {
+        /// <summary>
+        ///     Configures identity options and settings, creates nessesary entities
+        /// </summary>
+        /// <param name="app">Stores application startup settings</param>
         public static void ConfigureIdentity(IAppBuilder app)
         {
             app.CreatePerOwinContext(() => new VeronaTourDbContext());
@@ -36,26 +43,25 @@ namespace VeronaTour.BLL.Configuration
             var context = new VeronaTourDbContext();
             context.Database.Initialize(true);
 
-
             CreateRoles();
         }
 
+        /// <summary>
+        ///     Creates Admin (plus default user), Manager and Client
+        ///     identity roles and saves them to the DB.
+        /// </summary>
         private static void CreateRoles()
         {
             var context = new VeronaTourDbContext();
 
             var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
             var UserManager = new UserManager<User>(new UserStore<User>(context));
-
-            // In Startup iam creating first Admin Role and creating a default Admin User     
+  
             if (!roleManager.RoleExists("Admin"))
             {
-                // first we create Admin rool    
-                var roleAdmin = new Microsoft.AspNet.Identity.EntityFramework.IdentityRole();
+                var roleAdmin = new IdentityRole();
                 roleAdmin.Name = "Admin";
                 roleManager.Create(roleAdmin);
-
-                //Here we create a Admin super user who will maintain the website                   
 
                 var user = new User();
                 user.UserName = "vkorzhevyh@gmail.com";
@@ -65,25 +71,23 @@ namespace VeronaTour.BLL.Configuration
                 user.Password = "Qwerty6_";
 
                 var chkUser = UserManager.Create(user, user.Password);
-
-                //Add default User to Role Admin    
+   
                 if (chkUser.Succeeded)
                 {
-                    var result1 = UserManager.AddToRole(user.Id, "Admin");
-
+                    UserManager.AddToRole(user.Id, "Admin");
                 }
             }
  
             if (!roleManager.RoleExists("Manager"))
             {
-                var role = new Microsoft.AspNet.Identity.EntityFramework.IdentityRole();
+                var role = new IdentityRole();
                 role.Name = "Manager";
                 roleManager.Create(role);
             }
 
             if (!roleManager.RoleExists("Client"))
             {
-                var role = new Microsoft.AspNet.Identity.EntityFramework.IdentityRole();
+                var role = new IdentityRole();
                 role.Name = "Client";
                 roleManager.Create(role);
             }

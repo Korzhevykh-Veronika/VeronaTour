@@ -4,8 +4,15 @@ using VeronaTour.DAL.Entites;
 
 namespace VeronaTour.BLL.Utils
 {
+    /// <summary>
+    ///     Provides configuration for mapping BLL`s classes
+    /// </summary>
     public class VeronaMapperConfiguration
     {
+        /// <summary>
+        ///     Get configuratino for mapping
+        /// </summary>
+        /// <returns>Mapping configuration</returns>
         public static MapperConfiguration GetConfiguration()
         {
             return new MapperConfiguration(cfg =>
@@ -16,8 +23,7 @@ namespace VeronaTour.BLL.Utils
                 cfg.CreateMap<Hotel, HotelDTO>();
                 cfg.CreateMap<HotelDTO, Hotel>();
 
-                cfg.CreateMap<UserDTO, User>()
-                    .ForMember(dest => dest.Role, opt => opt.Ignore());
+                cfg.CreateMap<UserDTO, User>();
                 cfg.CreateMap<User, UserDTO>()
                     .ForMember(dest => dest.Id, opt => opt.MapFrom(source => source.UserId))
                     .ForMember(dest => dest.Role, opt => opt.Ignore());
@@ -28,8 +34,6 @@ namespace VeronaTour.BLL.Utils
                 cfg.CreateMap<Tour, TourDTO>();
                 cfg.CreateMap<TourDTO, Tour>();
 
-                cfg.CreateMap<UserRole, UserRoleDTO>();
-
                 cfg.CreateMap<OrderStatus, OrderStatusDTO>();
                 cfg.CreateMap<Order, OrderDTO>();
 
@@ -38,6 +42,8 @@ namespace VeronaTour.BLL.Utils
 
                 cfg.CreateMap<SaleSettingsDTO, SaleSettings>();
                 cfg.CreateMap<SaleSettings, SaleSettingsDTO>();
+
+                cfg.CreateMap<ExceptionDetail, ExceptionDetailDTO>();
             });
         }
     }

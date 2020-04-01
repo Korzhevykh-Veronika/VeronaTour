@@ -5,10 +5,10 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
+using NLog;
 using VeronaTour.BLL.DTOs;
 using VeronaTour.BLL.Services;
 using VeronaTour.BLL.Services.Interfaces;
-using VeronaTour.BLL.Utils;
 using VeronaTour.WEB.Models;
 
 namespace VeronaTour.WEB.Controllers
@@ -18,7 +18,8 @@ namespace VeronaTour.WEB.Controllers
     {
         public AccountController(
             IMainService mainService,
-            IIdentityService identityService) : base(mainService, identityService)
+            IIdentityService identityService,
+            ILogger logger) : base(mainService, identityService, logger)
         {
 
         }
@@ -112,26 +113,6 @@ namespace VeronaTour.WEB.Controllers
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie, DefaultAuthenticationTypes.ExternalCookie);
             return RedirectToAction("Index", "Home");
         }
-
-        //protected override void Dispose(bool disposing)
-        //{
-        //    if (disposing)
-        //    {
-        //        if (_userManager != null)
-        //        {
-        //            _userManager.Dispose();
-        //            _userManager = null;
-        //        }
-
-        //        if (_signInManager != null)
-        //        {
-        //            _signInManager.Dispose();
-        //            _signInManager = null;
-        //        }
-        //    }
-
-        //    base.Dispose(disposing);
-        //}
 
         #region Helpers
         // Used for XSRF protection when adding external logins

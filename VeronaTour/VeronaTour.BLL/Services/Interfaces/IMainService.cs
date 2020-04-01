@@ -1,8 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Web;
 using VeronaTour.BLL.DTOs;
-using VeronaTour.DAL.Entites;
-
 namespace VeronaTour.BLL.Services
 {
     public interface IMainService
@@ -12,6 +9,7 @@ namespace VeronaTour.BLL.Services
         IEnumerable<FeedingTypeDTO> GetFeedingTypes();
         IEnumerable<TourTypeDTO> GetTourTypes();
         IEnumerable<HotelDTO> GetHotels();
+        IEnumerable<ExceptionDetailDTO> GetLogs();
         IEnumerable<UserDTO> GetUsers();
         IEnumerable<string> GetTourTypesTitles();
         IEnumerable<string> GetFeedingTypesTitles();

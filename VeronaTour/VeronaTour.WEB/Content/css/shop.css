@@ -1008,7 +1008,7 @@ span.item_price {
 
 .grid_meta {
 	float: left;
-	width: 80%;
+	/*width: 80%;*/
 	text-align: left;
 }
 

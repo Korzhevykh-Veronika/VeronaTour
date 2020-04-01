@@ -14,14 +14,9 @@ namespace VeronaTour.BLL.DTOs
                 
         public string PhoneNumber { get; set; }
 
-        //public OrderStatusDTO Status { get; set; }
-     
         public double Sale { get; set; }
 
-        //public  UserRoleDTO Role { get; set; }
-
         public string Role { get; set; }
-
         public bool IsBlocked { get; set; }
     }
 }

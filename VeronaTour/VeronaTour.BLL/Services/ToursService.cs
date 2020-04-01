@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -11,32 +12,57 @@ using VeronaTour.DAL.Interfaces;
 
 namespace VeronaTour.BLL.Services
 {
+    /// <summary>
+    ///     Contains business logic connected with tours
+    /// </summary>
     public class ToursService : IToursService
     {
-        IUnitOfWork unitOfWork;
-        IMapper mapper;
+        private IUnitOfWork unitOfWork;
+        private IMapper mapper;
+        private ILogger logger;
 
         const string variantAll = "Choose...";
 
-        public ToursService(IUnitOfWork newUnitOfWork, IMapper newMapper)
+        /// <summary>
+        ///     Constructor
+        /// </summary>
+        /// <param name="newUnitOfWork">DB access provider</param>
+        /// <param name="newMapper">Mapper</param>
+        /// <param name="newLogger">Logger</param>
+        public ToursService(IUnitOfWork newUnitOfWork, IMapper newMapper, ILogger newLogger)
         {
             unitOfWork = newUnitOfWork;
             mapper = newMapper;
+            logger = newLogger;
         }
 
+        /// <summary>
+        ///     Get all tours
+        /// </summary>
+        /// <returns>Sequence of tours</returns>
         public IEnumerable<TourDTO> GetTours()
         {
             return mapper.Map<IEnumerable<TourDTO>>(unitOfWork.Tours.GetAll().Where(t => !t.IsDeleted && t.CountOfTour > 0));
-
         }
+
+        /// <summary>
+        ///     Get all tours even soft deleted
+        /// </summary>
+        /// <returns>Sequence of tours</returns>
         public IEnumerable<TourDTO> GetSortAdminTours()
         {
             return mapper.Map<IEnumerable<TourDTO>>(unitOfWork.Tours.GetAll().OrderBy(t => t.IsDeleted).ThenByDescending(t => t.Id));
         }
+
+        /// <summary>
+        ///     Get available for selecting tours
+        /// </summary>
+        /// <returns>Sequence of tours</returns>
         public IEnumerable<TourDTO> GetSortTours()
         {
             var startDatetime = DateTime.Today.AddDays(1);
             var endDatetime = DateTime.Today.AddDays(31);
+
             var tours = unitOfWork
                 .Tours
                 .GetAll()
@@ -48,15 +74,29 @@ namespace VeronaTour.BLL.Services
                 .ToList();
 
             return mapper.Map<IEnumerable<TourDTO>>(tours);
-
         }
-        public TourDTO GetTour(int id)
+
+        /// <summary>
+        ///     Get specific tour
+        /// </summary>
+        /// <param name="id">Tour identifier</param>
+        /// <param name="showAll">Should return deleted tours</param>
+        /// <returns></returns>
+        public TourDTO GetTour(int id, bool showAll)
         {
             var tour = unitOfWork.Tours.Get(id);
 
-            tour.MaxPeopleCount = (tour.MaxPeopleCount < tour.CountOfTour) // to service
-                    ? tour.MaxPeopleCount
-                    : tour.CountOfTour;
+            if (tour == null 
+                || (!showAll && (tour.IsDeleted || tour.CountOfTour <= 0)))
+            {
+                logger.Warn($"Tour with id {id} was not found.");
+
+                return null;
+            }
+            
+            tour.MaxPeopleCount = (tour.MaxPeopleCount < tour.CountOfTour)
+                                               ? tour.MaxPeopleCount
+                                               : tour.CountOfTour;
 
             tour.MinPeopleCount = (tour.MinPeopleCount < tour.CountOfTour)
                 ? tour.MinPeopleCount
@@ -65,6 +105,10 @@ namespace VeronaTour.BLL.Services
             return mapper.Map<TourDTO>(tour);
         }
 
+        /// <summary>
+        ///     Get hot tours
+        /// </summary>
+        /// <returns>Sequence of tours</returns>
         public IEnumerable<TourDTO> GetHotTours()
         {
             var startDatetime = DateTime.Today.AddDays(1);
@@ -72,6 +116,11 @@ namespace VeronaTour.BLL.Services
             return mapper.Map<IEnumerable<TourDTO>>(unitOfWork.Tours.Find(t => !t.IsDeleted && t.HotTour && startDatetime <= t.StartDate && t.CountOfTour > 0).ToList());
         }    
 
+        /// <summary>
+        ///     Get filtered by filter options tours
+        /// </summary>
+        /// <param name="filterOptions">Filter options</param>
+        /// <returns>Sequence of tours</returns>
         public IEnumerable<TourDTO> GetFilteredTours(FilterDTO filterOptions)
         {
             var tours = unitOfWork.Tours.Find(t => !t.IsDeleted && t.CountOfTour > 0).ToList();
@@ -120,8 +169,11 @@ namespace VeronaTour.BLL.Services
             }
             if (filterOptions.SelectedNumberOfPeople != 0)
             {
-                tours = tours.Where(t => t.MinPeopleCount <= filterOptions.SelectedNumberOfPeople && filterOptions.SelectedNumberOfPeople <= t.MaxPeopleCount).ToList();
-
+                tours = tours
+                    .Where(t => 
+                        t.MinPeopleCount <= filterOptions.SelectedNumberOfPeople 
+                        && filterOptions.SelectedNumberOfPeople <= t.MaxPeopleCount)
+                    .ToList();
             }
             if (filterOptions.SelectedPrice != 0)
             {
@@ -139,6 +191,16 @@ namespace VeronaTour.BLL.Services
             return mapper.Map<IEnumerable<TourDTO>>(tours);
         }
 
+        /// <summary>
+        ///     Adds tour to the database
+        /// </summary>
+        /// <param name="tour">Tour information</param>
+        /// <param name="selectedHotel">Selected hotel</param>
+        /// <param name="selectedFeedingType">Selected feeding type</param>
+        /// <param name="selectedTourType">Selected tour type</param>
+        /// <param name="selectedCountry">Selected country</param>
+        /// <param name="uploadImage">Uploaded image</param>
+        /// <returns>Sequence of errors</returns>
         public IEnumerable<string> AddTour(
             TourDTO tour,
             string selectedHotel,
@@ -154,6 +216,7 @@ namespace VeronaTour.BLL.Services
             if (unitOfWork.Tours.Find(t => t.Title == tour.Title).Any())
             {
                 errors.Add("This tour has been already presented.");
+                logger.Warn($"{tour.Title} has been already presented");
             }
 
             if (errors.Count() == 0)
@@ -164,21 +227,32 @@ namespace VeronaTour.BLL.Services
                 tourEntity.Country = unitOfWork.Countries.Find(h => h.Title == selectedCountry).FirstOrDefault();
 
                 byte[] imageData = null;
-                // считываем переданный файл в массив байтов
+                
                 using (var binaryReader = new BinaryReader(uploadImage.InputStream))
                 {
                     imageData = binaryReader.ReadBytes(uploadImage.ContentLength);
                 }
-                // установка массива байтов
+                
                 tourEntity.Image = imageData;
 
-
                 unitOfWork.Tours.Create(tourEntity);
+
+                logger.Info($"Tour {tourEntity.Title} was added.");
             }
 
             return errors;
         }
 
+        /// <summary>
+        ///     Updates tour entity
+        /// </summary>
+        /// <param name="tour">Tour information</param>
+        /// <param name="selectedHotel">Selected hotel</param>
+        /// <param name="selectedFeedingType">Selected feeding type</param>
+        /// <param name="selectedTourType">Selected tour type</param>
+        /// <param name="selectedCountry">Selected country</param>
+        /// <param name="uploadImage">Uploaded image</param>
+        /// <returns>Sequence of errors</returns>
         public IEnumerable<string> EditTour(
             TourDTO tour,
             string selectedHotel,
@@ -190,7 +264,6 @@ namespace VeronaTour.BLL.Services
             var errors = new List<string>();
 
             var tourEntity = unitOfWork.Tours.Get(tour.Id);
-
 
             if (errors.Count() == 0)
             {
@@ -223,22 +296,38 @@ namespace VeronaTour.BLL.Services
                 }
 
                 unitOfWork.Tours.Update(tourEntity);
+
+                logger.Info($"Tour {tourEntity.Title} was edited.");
             }
 
             return errors;
         }
 
+        /// <summary>
+        ///     Deletes tour from the DB.
+        /// </summary>
+        /// <param name="id">Tour identifier</param>
         public void DeleteTour(int id)
         {
             var tour = unitOfWork.Tours.Get(id);
+
             if (tour != null)
             {
                 tour.IsDeleted = true;
                 unitOfWork.Tours.Update(tour);
-            }
 
+                logger.Info($"Tour {tour.Title} was soft deleted.");
+            }
+            else
+            {
+                logger.Warn($"Tour {tour.Title} was not found for deleting.");
+            }
         }
 
+        /// <summary>
+        ///     Change hot status of tour to vise versa
+        /// </summary>
+        /// <param name="id">Tour identifier</param>
         public void ChangeTourHot(int id)
         {
             var tour = unitOfWork.Tours.Find(t => t.Id == id).FirstOrDefault();
@@ -246,6 +335,8 @@ namespace VeronaTour.BLL.Services
             tour.HotTour = !tour.HotTour;
 
             unitOfWork.Tours.Update(tour);
+
+            logger.Info($"Tour {tour.Title} is " + (tour.HotTour ? "" : "not ") + "hot.");
         }
     }
 }

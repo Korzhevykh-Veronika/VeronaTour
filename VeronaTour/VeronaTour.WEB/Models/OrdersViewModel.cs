@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
 using VeronaTour.BLL.DTOs;
 
 namespace VeronaTour.WEB.Models

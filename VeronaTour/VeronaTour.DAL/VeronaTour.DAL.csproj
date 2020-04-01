@@ -45,9 +45,39 @@
     <Reference Include="Microsoft.AspNet.Identity.EntityFramework, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.3\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NLog.4.7.0\lib\net45\NLog.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.7\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.7\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -59,6 +89,7 @@
     <Compile Include="Context\VeronaTourDbContext.cs" />
     <Compile Include="Context\VeronaTourDbInitializer.cs" />
     <Compile Include="Entites\Country.cs" />
+    <Compile Include="Entites\ExceptionDetail.cs" />
     <Compile Include="Entites\FeedingType.cs" />
     <Compile Include="Entites\Hotel.cs" />
     <Compile Include="Entites\Order.cs" />
@@ -67,12 +98,23 @@
     <Compile Include="Entites\Tour.cs" />
     <Compile Include="Entites\TourType.cs" />
     <Compile Include="Entites\User.cs" />
-    <Compile Include="Entites\UserRole.cs" />
     <Compile Include="Interfaces\IRepository.cs" />
     <Compile Include="Interfaces\IUnitOfWork.cs" />
     <Compile Include="Migrations\202003131828021_InitialCreate.cs" />
     <Compile Include="Migrations\202003131828021_InitialCreate.Designer.cs">
       <DependentUpon>202003131828021_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202003161533489_Drop_Column_User_Role.cs" />
+    <Compile Include="Migrations\202003161533489_Drop_Column_User_Role.Designer.cs">
+      <DependentUpon>202003161533489_Drop_Column_User_Role.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202003311233275_Remove_Validation.cs" />
+    <Compile Include="Migrations\202003311233275_Remove_Validation.Designer.cs">
+      <DependentUpon>202003311233275_Remove_Validation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202003311234340_Implimitation_Logging.cs" />
+    <Compile Include="Migrations\202003311234340_Implimitation_Logging.Designer.cs">
+      <DependentUpon>202003311234340_Implimitation_Logging.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -86,6 +128,15 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202003131828021_InitialCreate.resx">
       <DependentUpon>202003131828021_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202003161533489_Drop_Column_User_Role.resx">
+      <DependentUpon>202003161533489_Drop_Column_User_Role.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202003311233275_Remove_Validation.resx">
+      <DependentUpon>202003311233275_Remove_Validation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202003311234340_Implimitation_Logging.resx">
+      <DependentUpon>202003311234340_Implimitation_Logging.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

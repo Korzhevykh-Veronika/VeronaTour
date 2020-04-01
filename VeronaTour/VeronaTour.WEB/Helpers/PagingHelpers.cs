@@ -4,8 +4,17 @@ using VeronaTour.WEB.Models;
 
 namespace VeronaTour.WEB.Helpers
 {
+    /// <summary>
+    ///     Helper for the Razor that allows to create pagination component
+    /// </summary>
     public static class PagingHelpers
     {
+        /// <summary>
+        ///     Extension method that creates paginator for navigating between pages
+        /// </summary>
+        /// <param name="html">html helper</param>
+        /// <param name="pageInfo">Nessesary information for creation of pagination component</param>
+        /// <returns></returns>
         public static MvcHtmlString PageLinks(this HtmlHelper html,
             PageInfo pageInfo)
         {

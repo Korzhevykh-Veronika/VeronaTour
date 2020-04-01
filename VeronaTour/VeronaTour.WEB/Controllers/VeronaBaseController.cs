@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
+using NLog;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using VeronaTour.BLL.DTOs;
@@ -20,13 +19,15 @@ namespace VeronaTour.WEB.Controllers
 
         protected IMainService mainService;
         protected IIdentityService identityService;
+        protected ILogger logger;
 
         protected UserDTO currentUser;
 
-        protected VeronaBaseController(IMainService newMainService, IIdentityService newIdentityService)
+        protected VeronaBaseController(IMainService newMainService, IIdentityService newIdentityService, ILogger newLogger)
         {
             mainService = newMainService;
             identityService = newIdentityService;
+            logger = newLogger;
 
             currentUser = GetCurrentUser();
 
@@ -35,6 +36,13 @@ namespace VeronaTour.WEB.Controllers
                 var authenticationManager = HttpContext.GetOwinContext().Authentication;
                 authenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
             }
+        }
+
+        protected override void OnException(ExceptionContext filterContext)
+        {
+            logger.Fatal(filterContext.Exception, "Unhandled exception");
+
+            base.OnException(filterContext);
         }
 
         protected void AddErrors(IEnumerable<string> errors)
@@ -92,6 +100,6 @@ namespace VeronaTour.WEB.Controllers
                 userManager);
 
             return user;
-        } 
+        }
     }
 }

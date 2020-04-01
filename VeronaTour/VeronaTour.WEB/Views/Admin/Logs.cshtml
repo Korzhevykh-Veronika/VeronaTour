@@ -1,0 +1,104 @@
+﻿@model IEnumerable<VeronaTour.BLL.DTOs.ExceptionDetailDTO>
+
+@{
+    ViewBag.Title = "Logs";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        Logs list
+    </h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="@Url.Action("Index", "Admin")">
+                <i class="fa fa-dashboard"></i> Home
+            </a>
+        </li>
+        <li class="active">Logs list</li>
+    </ol>
+</section>
+<!-- //Content Header -->
+<!-- Main content -->
+@if (Model.Any())
+{
+    <section class="content">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box">
+                    <div class="box-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.Date)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.Level)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.Message)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.Exception)
+                                        </th>                                        
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.Logger)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.MachineName)
+                                        </th>                                        
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.StackTrace)
+                                        </th>                                        
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.Username)
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr class="@((item.Level == "Fatal") ? "fatal-row" : (item.Level == "Warn") ? "yellow-row": (item.Level == "Error") ?"canceled-row":"") ">
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Date)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Level)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Message)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Exception)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Logger)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.MachineName)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.StackTrace)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Username)
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+}
+else
+{
+    <h3 class="text-center">This list is empty.</h3>
+}
+<!-- //content -->

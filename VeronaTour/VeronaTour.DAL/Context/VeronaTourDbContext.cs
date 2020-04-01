@@ -20,11 +20,10 @@ namespace VeronaTour.DAL.EF
         public DbSet<TourType> TourTypes { get; set; }
         public DbSet<FeedingType> FeedingTypes { get; set; }
         public DbSet<Hotel> Hotels { get; set; }
-        //public DbSet<User> Users { get; set; }
-        public DbSet<UserRole> UserRoles { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<Country> Countries { get; set; }
         public DbSet<OrderStatus> OrderStatuses { get; set; }
         public DbSet<SaleSettings> SaleSettings { get; set; }
+        public DbSet<ExceptionDetail> ExceptionDetails { get; set; }
     }
 }

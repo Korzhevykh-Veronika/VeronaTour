@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using NLog;
+using System;
 using VeronaTour.DAL.EF;
 using VeronaTour.DAL.Entites;
 using VeronaTour.DAL.Interfaces;
@@ -10,40 +7,53 @@ using VeronaTour.DAL.Repositories;
 
 namespace VeronaTour.DAL
 {
+    /// <summary>
+    ///     Unit that provides access to repositories and manages their lifecycle
+    /// </summary>
     public class UnitOfWork : IUnitOfWork, IDisposable
     {
-        private VeronaTourDbContext dbContext;
-        private IRepository<FeedingType> feedingTypeRepository;
-        private IRepository<Hotel> hotelRepository;
-        private IRepository<Order> orderRepository;
-        private IRepository<OrderStatus> orderStatusRepository;
-        private IRepository<Tour> tourRepository;
-        private IRepository<TourType> tourTypeRepository;
-        private IRepository<User> userRepository;
-        //private IRepository<UserRole> userRoleRepository;
-        public IRepository<Country> countryRepository;
-        public IRepository<SaleSettings> saleRepository;
-
-
-        public UnitOfWork(VeronaTourDbContext veronaTourDbContext)
+        private readonly VeronaTourDbContext dbContext;
+        private readonly IRepository<FeedingType> feedingTypeRepository;
+        private readonly IRepository<Hotel> hotelRepository;
+        private readonly IRepository<Order> orderRepository;
+        private readonly IRepository<OrderStatus> orderStatusRepository;
+        private readonly IRepository<Tour> tourRepository;
+        private readonly IRepository<TourType> tourTypeRepository;
+        private readonly IRepository<User> userRepository;
+        private readonly IRepository<Country> countryRepository;
+        private readonly IRepository<SaleSettings> saleRepository;
+        private readonly IRepository<ExceptionDetail> exceptionDetail;
+        
+        /// <summary>
+        ///     Constructor that creates repositories with same dbContext and logger
+        /// </summary>
+        /// <param name="veronaTourDbContext">Database context</param>
+        /// <param name="logger">Logger</param>
+        public UnitOfWork(VeronaTourDbContext veronaTourDbContext, ILogger logger)
         {
             dbContext = veronaTourDbContext;
-            feedingTypeRepository = new GeneralRepository<FeedingType>(dbContext);
-            hotelRepository = new GeneralRepository<Hotel>(dbContext);
-            orderRepository = new GeneralRepository<Order>(dbContext);
-            orderStatusRepository = new GeneralRepository<OrderStatus>(dbContext);
-            tourRepository = new GeneralRepository<Tour>(dbContext);
-            tourTypeRepository= new GeneralRepository<TourType>(dbContext);
-            userRepository = new GeneralRepository<User>(dbContext);
-            //userRoleRepository = new GeneralRepository<UserRole>(dbContext);
-            countryRepository = new GeneralRepository<Country>(dbContext);
-            saleRepository = new GeneralRepository<SaleSettings>(dbContext);
+            feedingTypeRepository = new GeneralRepository<FeedingType>(dbContext, logger);
+            hotelRepository = new GeneralRepository<Hotel>(dbContext, logger);
+            orderRepository = new GeneralRepository<Order>(dbContext, logger);
+            orderStatusRepository = new GeneralRepository<OrderStatus>(dbContext, logger);
+            tourRepository = new GeneralRepository<Tour>(dbContext, logger);
+            tourTypeRepository= new GeneralRepository<TourType>(dbContext, logger);
+            userRepository = new GeneralRepository<User>(dbContext, logger);
+            countryRepository = new GeneralRepository<Country>(dbContext, logger);
+            saleRepository = new GeneralRepository<SaleSettings>(dbContext, logger);
+            exceptionDetail = new GeneralRepository<ExceptionDetail>(dbContext, logger);
         }
 
         public IRepository<SaleSettings> Sales
         {
             get { return saleRepository; }
         }
+
+        public IRepository<ExceptionDetail> Logs
+        {
+            get { return exceptionDetail; }
+        }
+
         public IRepository<Country> Countries
         {
             get { return countryRepository; }
@@ -83,13 +93,7 @@ namespace VeronaTour.DAL
         {
             get { return userRepository; }
         }
-
-        //public IRepository<UserRole> UserRoles
-        //{
-        //    get { return userRoleRepository; }
-        //}
-
-
+        
         public void Dispose()
         {
             dbContext.Dispose();

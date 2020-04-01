@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNet.Identity.Owin;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +24,8 @@ namespace VeronaTour.WEB.Controllers
             IMainService newMainService,
             IOrdersService newOrdersService,
             IToursService newToursService,
-            IIdentityService identityService) : base(newMainService, identityService)
+            IIdentityService identityService,
+            ILogger logger) : base(newMainService, identityService, logger)
         {
             toursService = newToursService;
             ordersService = newOrdersService;
@@ -143,7 +145,7 @@ namespace VeronaTour.WEB.Controllers
         [HttpGet]
         public ActionResult Details(int id)
         {           
-            var tour = toursService.GetTour(id);
+            var tour = toursService.GetTour(id, false);
 
             if (tour != null)
             { 
@@ -190,7 +192,6 @@ namespace VeronaTour.WEB.Controllers
         [HttpPost]
         public ActionResult OrderPost()
         {
-            
             var errors = ordersService.RegisterOrders(currentUser.Id);
 
             if (errors.Count() != 0)
@@ -303,9 +304,9 @@ namespace VeronaTour.WEB.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult Error502()
+        public ActionResult Error500()
         {
-            Response.StatusCode = 502;
+            Response.StatusCode = 500;
             return View();
         }
     }

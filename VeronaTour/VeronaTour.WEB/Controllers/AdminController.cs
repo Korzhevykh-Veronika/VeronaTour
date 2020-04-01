@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
+using NLog;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -22,7 +24,8 @@ namespace VeronaTour.WEB.Controllers
             IMainService newMainService,
             IOrdersService newOrdersService,
             IToursService newToursService,
-            IIdentityService newIdentityService) : base(newMainService, newIdentityService)
+            IIdentityService identityService,
+            ILogger logger) : base(newMainService, identityService, logger)
         {
             toursService = newToursService;
             ordersService = newOrdersService;
@@ -79,7 +82,7 @@ namespace VeronaTour.WEB.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult DetailsTour(int id)
         {
-            var tour = toursService.GetTour(id);
+            var tour = toursService.GetTour(id, true);
 
             if (tour != null)
             {
@@ -119,11 +122,28 @@ namespace VeronaTour.WEB.Controllers
         public async Task<ActionResult> UpdateUserSettings(UsersViewModel model, string email)
         {
             var userManager = HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
+            var errors = new List<string>();
 
-            if(email != currentUser.Email)
+            if (email != currentUser.Email)
                 await identityService.UpdateUserSettings(email, model.SelectedRole, model.IsBlocked, userManager);
-            
-            return RedirectToAction("Index");
+            else
+                errors.Add("You cannot update yourself.");
+
+            if (errors.Any())
+            {
+                AddErrors(errors);                
+            }
+
+            var users = await identityService.GetUsers(userManager);
+
+            var newModel = new UsersViewModel()
+            {
+                Users = users,
+                Roles = await identityService.GetRoles(),
+                IsBlocked = ""
+            };
+
+            return View("Users", newModel);
         }
 
         [Authorize(Roles = "Admin")]
@@ -245,7 +265,7 @@ namespace VeronaTour.WEB.Controllers
         [HttpGet]
         public ActionResult EditTour(int id)
         {
-            var tour = toursService.GetTour(id);
+            var tour = toursService.GetTour(id, true);
 
             if (tour != null)
             {
@@ -388,6 +408,12 @@ namespace VeronaTour.WEB.Controllers
             }
 
             return View();
+        }
+
+        public ActionResult Logs()
+        {
+            var logs = mainService.GetLogs();
+            return View(logs);
         }
 
         private AddTourViewModel InitialteTourViewModel()

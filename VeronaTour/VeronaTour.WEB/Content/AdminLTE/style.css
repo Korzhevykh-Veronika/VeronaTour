@@ -38,12 +38,18 @@
     }
 
 .paid-row td {
-    background-color: rgb(152,251,152, 0.75);
+    background-color: rgba(152,251,152, 0.75);
 }
 
 .canceled-row td {
-    background-color: rgb(255,0,0, 0.55);
+    background-color: rgba(255,0,0, 0.55);
 }
 .primary-row {
-    background-color: rgb(135,206,235, 0.55);
+    background-color: rgba(135,206,235, 0.55);
+}
+.yellow-row td{
+    background-color: rgb(255,255,102)
+}
+.fatal-row td {
+    background-color: rgb(139,0,0)
 }

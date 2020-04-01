@@ -9,12 +9,6 @@
     @Styles.Render("~/Content/font-awesome.css")
     @Scripts.Render("~/bundles/modernizr")
 
-    <link href="@Url.Content("~/Content/css/style-adaptability.css")" rel='stylesheet' type='text/css' />
-    <link href="@Url.Content("~/Content/css/style.css")" rel='stylesheet' type='text/css' />
-    <link rel="stylesheet" href="@Url.Content("~/Content/css/owl.carousel.css")" type="text/css" media="all">
-    <link rel="stylesheet" href="@Url.Content("~/Content/css/owl.theme.css")" type="text/css" media="all">
-    <link rel="stylesheet" href="@Url.Content("~/Content/css/shop.css")" type="text/css" />
-    <link href="@Url.Content("~/Content/css/easy-responsive-tabs.css")" rel='stylesheet' type='text/css' />
     <link href="https://fonts.googleapis.com/css?family=Inconsolata:400,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800" rel="stylesheet">
     <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/sweetalert2@7.12.15/dist/sweetalert2.min.css'>
@@ -29,7 +23,7 @@
                 <div class="col-md-3 top-info text-left mt-lg-4">
                     <ul>
                         <li>
-                            <i class="fa fa-phone mt-3"></i> Call
+                            <i class="fa fa-phone mt-3 fa-lg"></i> Call
                         </li>
                         <li class="number-phone ">+19706792065</li>
                     </ul>
@@ -45,7 +39,7 @@
                         <li class="button-log">
                             <div class="dropdown">
                                 <button class="btn  dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background-color: #FFF8F4">
-                                    <span class="fa fa-user" aria-hidden="true"></span>
+                                    <span class="fa fa-user fa-lg" aria-hidden="true"></span>
                                 </button>
                                 <ul class="dropdown-menu mega-menu" aria-labelledby="dropdownMenuButton" style="border-radius: 5px">
                                     @if (User.Identity.IsAuthenticated)
@@ -102,25 +96,6 @@
                     </ul>
                 </div>
             </div>
-            @*<div class="search">
-                    <div class="mobile-nav-button">
-                        <button id="trigger-overlay" type="button">
-                            <i class="fa fa-search"></i>
-                        </button>
-                    </div>
-                    <div class="overlay overlay-door">
-                        <button type="button" class="overlay-close">
-                            <i class="fa fa-times" aria-hidden="true"></i>
-                        </button>
-                        <form class="searchform " action="search" method="get">
-                            <input id="typeahead" type="text" placeholder="Enter something..." name="s">
-                            <button type="submit">
-                                <i class="fa fa-search"></i>
-                            </button>
-                        </form>
-
-                    </div>
-                </div>*@
             <label class="top-log mx-auto"></label>
             <nav class="navbar navbar-expand-lg navbar-light bg-light top-header mb-2">
                 <button class="navbar-toggler mx-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
@@ -231,17 +206,14 @@
     <!-- //footer -->
 
     @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/scripts")
     @Scripts.Render("~/bundles/jqueryval")
-    @Scripts.Render("~/Scripts/jquery.maskedinput.min.js")
-    @Scripts.Render("~/Scripts/umd/popper.min.js")
     @Scripts.Render("~/bundles/bootstrap")
-    @Scripts.Render("~/Scripts/script/easy-responsive-tabs.js")
-    @Scripts.Render("~/Scripts/script/owl.carousel.js")
+
     @RenderSection("scripts", required: false)
     <script src="@Url.Content("https://cdn.jsdelivr.net/npm/sweetalert2@7.12.15/dist/sweetalert2.all.min.js")"></script>
     <script src="@Url.Content("https://cdn.jsdelivr.net/momentjs/latest/moment.min.js")"></script>
     <script src="@Url.Content("https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js")"></script>
-    @Scripts.Render("~/Scripts/script/script.js")
     <script>
         //DateFilter
         if (document.getElementById("StartDate") !== null) {

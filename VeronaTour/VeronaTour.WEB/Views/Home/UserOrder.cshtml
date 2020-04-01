@@ -57,7 +57,7 @@
                                     <td>@order.NumberOfPeople</td>
                                     <td>@(order.Tour.Price * order.NumberOfPeople)</td>
                                     <td class="text-center">
-                                        <a href="@Url.Action("Details", "Home", new { id=@order.Id })">
+                                        <a href="@Url.Action("Details", "Home", new { id=@order.Tour.Id })">
                                             <i class="fa fa-fw fa-eye" style="color: #ff4e00"></i>
                                         </a>
                                     </td>

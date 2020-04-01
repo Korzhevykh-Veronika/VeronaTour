@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VeronaTour.DAL", "VeronaTou
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VeronaTour.BLL", "VeronaTour.BLL\VeronaTour.BLL.csproj", "{1486058D-7916-4692-A0DF-46715C3EA4AB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VeronaTour.Tests", "VeronaTour.Tests\VeronaTour.Tests.csproj", "{DE0B87D5-4681-4D20-872C-49E605B93B1F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{1486058D-7916-4692-A0DF-46715C3EA4AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1486058D-7916-4692-A0DF-46715C3EA4AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1486058D-7916-4692-A0DF-46715C3EA4AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE0B87D5-4681-4D20-872C-49E605B93B1F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE0B87D5-4681-4D20-872C-49E605B93B1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE0B87D5-4681-4D20-872C-49E605B93B1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE0B87D5-4681-4D20-872C-49E605B93B1F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -46,7 +46,6 @@
                                 <tbody>
                                     @foreach (var order in Model.RegisteredOrder)
                                     {
-
                                         <tr class="@((order.Status.Title == "Paid") ? "paid-row" : (order.Status.Title == "Canceled") ? "canceled-row": "") ">
                                             <td>@order.Id</td>
                                             <td>@order.User.Name</td>

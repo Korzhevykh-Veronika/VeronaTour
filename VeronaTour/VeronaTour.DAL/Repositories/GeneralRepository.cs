@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NLog;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Migrations;
@@ -12,7 +13,9 @@ namespace VeronaTour.DAL.Repositories
         private DbContext DbContext { get; set; }
         private DbSet<T> DbSet { get; set; }
 
-        public GeneralRepository(DbContext dbContext)
+        private ILogger logger;
+
+        public GeneralRepository(DbContext dbContext, ILogger newLogger)
         {
             if (dbContext == null)
                 throw new ArgumentNullException("dbContext");
@@ -20,55 +23,115 @@ namespace VeronaTour.DAL.Repositories
             {
                 DbContext = dbContext;
                 DbSet = DbContext.Set<T>();
+                logger = newLogger;
             }
         }
 
         public IEnumerable<T> GetAll()
         {
-            return DbSet.AsNoTracking();
+            try
+            {
+                return DbSet.AsNoTracking();
+            }
+            catch(Exception ex)
+            {
+                logger.Error(ex, "SQL error");
+            }
+
+            return null;
         }
 
         public IEnumerable<T> Find(Func<T, Boolean> predicate)
         {
-            return DbSet.Where(predicate);
+            try
+            {
+                return DbSet.Where(predicate);
+            }
+            catch(Exception ex)
+            {
+                logger.Error(ex, "SQL error");
+            }
+
+            return null;
         }
 
         public T Get(int id)
         {
-            return DbSet.Find(id);
+            try
+            {
+                return DbSet.Find(id);
+            }
+            catch(Exception ex)
+            {
+                logger.Error(ex, "SQL error");
+            }
+
+            return null;
         }
 
         public void Create(T entity)
         {
-            DbSet.AddOrUpdate(entity);
+            try
+            {
+                DbSet.AddOrUpdate(entity);
 
-            DbContext.SaveChanges();
+                DbContext.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex, "SQL error");
+            }
         }
 
         public void Update(T entity)
         {
-            DbContext.Entry(entity).State = EntityState.Modified;
-
-            DbContext.SaveChanges();
+            try
+            {
+                DbContext.Entry(entity).State = EntityState.Modified;
+                DbContext.SaveChanges();
+            }
+            catch(Exception ex)
+            {
+                logger.Error(ex, "SQL error");
+            }            
         }
 
         public void Update(IEnumerable<T> entities)
         {
-            foreach (var entity in entities)
-            {
-                DbContext.Entry(entity).State = EntityState.Modified;
-            }
+            try
+            { 
+                foreach (var entity in entities)
+                {
+                    DbContext.Entry(entity).State = EntityState.Modified;
+                }
 
-            DbContext.SaveChanges();
+                DbContext.SaveChanges();
+            }
+            catch(Exception ex)
+            {
+                logger.Error(ex, "SQL error");
+            }           
         }
 
         public void Delete(int id)
         {
-            var deleteItem = DbSet.Find(id);
-            if (deleteItem != null)
-            { 
-                DbSet.Remove(deleteItem);
-                DbContext.SaveChanges();
+            try
+            {
+                var deleteItem = DbSet.Find(id);
+
+                if (deleteItem != null)
+                { 
+                    DbSet.Remove(deleteItem);
+                    DbContext.SaveChanges();
+                }
+                else
+                {
+                    logger.Warn($"Item {typeof(T)} with id: {id} was not found.");
+                }
+            }
+            catch(Exception ex)
+            {
+                logger.Error(ex, "SQL error");
             }
         }
     }

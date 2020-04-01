@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace VeronaTour.DAL.Entites
 {
@@ -17,7 +12,6 @@ namespace VeronaTour.DAL.Entites
         public int MaxPeopleCount { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        //public string ImageLink { get; set; }
         public byte[] Image { get; set; }
         public bool HotTour { get; set; }
         public bool IsDeleted { get; set; } = false;

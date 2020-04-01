@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using System.Web;
 using VeronaTour.BLL.DTOs;
 
@@ -27,12 +23,12 @@ namespace VeronaTour.BLL.Services.Interfaces
            string selectedCountry,
            HttpPostedFileBase uploadImage);
 
-        IEnumerable<TourDTO> GetFilteredTours(FilterDTO filterOptions); // t
-        IEnumerable<TourDTO> GetTours(); // t
-        IEnumerable<TourDTO> GetSortAdminTours(); // t
-        IEnumerable<TourDTO> GetSortTours(); // t
-        TourDTO GetTour(int id); // t
-        IEnumerable<TourDTO> GetHotTours(); // t
+        IEnumerable<TourDTO> GetFilteredTours(FilterDTO filterOptions); 
+        IEnumerable<TourDTO> GetTours();
+        IEnumerable<TourDTO> GetSortAdminTours(); 
+        IEnumerable<TourDTO> GetSortTours(); 
+        TourDTO GetTour(int id, bool showAll);
+        IEnumerable<TourDTO> GetHotTours(); 
         void DeleteTour(int id);
 
     }
