@@ -1,4 +1,5 @@
 ﻿using System.Web.Mvc;
+using VeronaTour.WEB.Filters;
 
 namespace VeronaTour.WEB
 {
@@ -13,7 +14,7 @@ namespace VeronaTour.WEB
         /// <param name="filters">global filters collection</param>
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
-            filters.Add(new HandleErrorAttribute());
+            filters.Add(new GlobalExceptionFilter());
         }
     }
 }
