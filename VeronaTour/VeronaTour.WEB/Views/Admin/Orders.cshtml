@@ -46,21 +46,33 @@
                                 <tbody>
                                     @foreach (var order in Model.RegisteredOrder)
                                     {
-                                        <tr class="@((order.Status.Title == "Paid") ? "paid-row" : (order.Status.Title == "Canceled") ? "canceled-row": "") ">
-                                            <td>@order.Id</td>
-                                            <td>@order.User.Name</td>
-                                            <td>@order.Tour.Title</td>
-                                            <td>@order.Status.Title</td>
-                                            <td>@order.NumberOfPeople</td>
-                                            <td>@order.DateOrder.ToShortDateString()</td>
-                                            <td>@order.DateUpdateOrder.ToShortDateString()</td>
-                                            <td>@(order.Tour.Price * order.NumberOfPeople)$</td>
-                                            <td class="text-center">
-                                                <a href="@Url.Action("DetailsOrder", "Admin" , new { id=@order.Id })" style="font-size:20px;">
-                                                    <i class="fa fa-fw fa-eye"></i>
-                                                </a> 
-                                            </td>
-                                        </tr>
+                                    <tr class="@((order.Status.Title == "Paid") ? "paid-row" : (order.Status.Title == "Canceled") ? "canceled-row": "") ">
+                                        <td>@order.Id</td>
+                                        <td>@order.User.Name</td>
+                                        <td>@order.Tour.Title</td>
+                                        <td>@order.Status.Title</td>
+                                        <td>@order.NumberOfPeople</td>
+                                        <td>@order.DateOrder.ToShortDateString()</td>
+                                        <td>@order.DateUpdateOrder.ToShortDateString()</td>
+                                        @if (order.Status.Title == "Paid")
+                                        {
+                                            
+                                            <td>@Convert.ToInt32(order.Tour.Price * order.NumberOfPeople * (1.0 - (double)@order.FinalSale / 100))$</td>
+
+
+                                        }
+                                        else
+                                        {
+                                            
+                                            <td>@Convert.ToInt32(order.Tour.Price * order.NumberOfPeople * (1.0 - (double)@order.User.Sale / 100))$</td>
+
+                                        }
+                                       <td class="text-center">
+                                            <a href="@Url.Action("DetailsOrder", "Admin" , new { id=@order.Id })" style="font-size:20px;">
+                                                <i class="fa fa-fw fa-eye"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
                                     }
                                 </tbody>
                             </table>

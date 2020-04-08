@@ -346,6 +346,7 @@ namespace VeronaTour.WEB.Controllers
             return View(model);
         }
 
+        [HttpGet]
         [Authorize(Roles = "Admin, Manager")]
         public async Task<ActionResult> ChangeOrderStatus(int orderId, string status)
         {

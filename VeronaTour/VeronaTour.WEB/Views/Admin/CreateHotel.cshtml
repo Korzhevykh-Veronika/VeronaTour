@@ -28,8 +28,15 @@
         <div class="col-md-12">
             <div class="box">
                 @using (Html.BeginForm("CreateHotel", "Admin", FormMethod.Post, new { id = "add" }))
-                {
+                {                   
                     @Html.AntiForgeryToken()
+                    foreach (ModelState modelState in ViewData.ModelState.Values)
+                    {
+                        foreach (ModelError error in modelState.Errors)
+                        {
+                            <p class="text-danger font-weight-bold text-center ">@error.ErrorMessage</p>
+                        }
+                    }
                     <div class="box-body">
                         <div class="form-group">
                             @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = " col-form-label-lg" })

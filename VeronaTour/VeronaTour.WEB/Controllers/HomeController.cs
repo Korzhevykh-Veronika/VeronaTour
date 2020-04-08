@@ -160,7 +160,6 @@ namespace VeronaTour.WEB.Controllers
             return HttpNotFound();
         }
 
-        [AllowAnonymous]
         [HttpPost]
         public ActionResult Details(DetailsViewModel detailsViewModel)
         {

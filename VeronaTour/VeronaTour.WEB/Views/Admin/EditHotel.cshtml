@@ -32,6 +32,13 @@
                 @using (Html.BeginForm("EditHotel", "Admin", FormMethod.Post, new { id = "add" }))
                 {
                     @Html.AntiForgeryToken()
+                    foreach (ModelState modelState in ViewData.ModelState.Values)
+                    {
+                        foreach (ModelError error in modelState.Errors)
+                        {
+                            <p class="text-danger font-weight-bold text-center ">@error.ErrorMessage</p>
+                        }
+                    }
                     <div class="box-body">
                         @Html.HiddenFor(model => model.Id)
                         <div class="form-group">

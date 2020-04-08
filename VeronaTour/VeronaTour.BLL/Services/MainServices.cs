@@ -169,7 +169,7 @@ namespace VeronaTour.BLL.Services
         {
             var allHotelsTitles = unitOfWork
                 .Hotels
-                .GetAll()
+                .Find(hotel => !hotel.IsDeleted)
                 .Select(hotel => hotel.Title + " * " + hotel.StarsCount)
                 .ToList();
 
@@ -252,6 +252,8 @@ namespace VeronaTour.BLL.Services
 
             var hotelEntity = mapper.Map<Hotel>(hotel);
 
+            hotel.Title = hotel.Title.Trim();
+
             if (unitOfWork.Hotels.Find(h => h.Title == hotel.Title).Any())
             {
                 errors.Add("This hotel has been already presented.");
@@ -274,6 +276,14 @@ namespace VeronaTour.BLL.Services
         public IEnumerable<string> EditHotel(HotelDTO hotel)
         {
             var errors = new List<string>();
+
+            hotel.Title = hotel.Title.Trim();
+
+            if (unitOfWork.Hotels.Find(h => h.Title == hotel.Title).Any())
+            {
+                errors.Add("This hotel has been already presented.");
+                logger.Warn($"{hotel.Title} has been already presented while editing.");
+            }
 
             var hotelEntity = unitOfWork.Hotels.Get(hotel.Id);
 

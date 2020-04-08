@@ -100,13 +100,16 @@
                                     @if (Model.Status.Title == "Paid")
                                     {
                                         <td>@Model.FinalSale %</td>
+                                        <td>@Convert.ToInt32(Model.Tour.Price * Model.NumberOfPeople * (1.0 - (double)@Model.FinalSale/ 100))$</td>
+
 
                                     }
                                     else
                                     {
                                         <td>@Model.User.Sale %</td>
+                                        <td>@Convert.ToInt32(Model.Tour.Price * Model.NumberOfPeople * (1.0 - (double)@Model.User.Sale / 100))$</td>
+
                                     }
-                                    <td>@Convert.ToInt32(Model.Tour.Price * Model.NumberOfPeople * (1.0 - (double)@Model.User.Sale / 100))$</td>
                                 </tr>
                             </tbody>
                         </table>

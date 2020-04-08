@@ -96,12 +96,13 @@ namespace VeronaTour.BLL.Services
         {
             var newstatus = unitOfWork.OrderStatuses.Find(s => s.Title == status).FirstOrDefault();
             var orderEntity = unitOfWork.Orders.Get(orderId);
+            var actualSale = unitOfWork.Users.GetAll().SingleOrDefault(u => u.Id == orderEntity.User.Id).Sale;
 
             orderEntity.Status = newstatus;
             orderEntity.DateUpdateOrder = DateTime.Now;
 
             if (status == "Paid")
-                orderEntity.FinalSale = orderEntity.User.Sale;
+                orderEntity.FinalSale = actualSale;
 
             if (status == "Canceled")
                 orderEntity.Tour.CountOfTour = orderEntity.Tour.CountOfTour + orderEntity.NumberOfPeople;
@@ -135,7 +136,7 @@ namespace VeronaTour.BLL.Services
         /// <returns>Order information</returns>
         public OrderDTO GetOrder(int id)
         {
-            return mapper.Map<OrderDTO>(unitOfWork.Orders.Get(id));
+            return mapper.Map<OrderDTO>(unitOfWork.Orders.GetAll().SingleOrDefault(o => o.Id == id));
         }
 
         /// <summary>
@@ -174,7 +175,7 @@ namespace VeronaTour.BLL.Services
         /// <returns>Sequence of orders</returns>
         public IEnumerable<OrderDTO> GetAllOrders()
         {
-            return mapper.Map<IEnumerable<OrderDTO>>(unitOfWork.Orders.Find(order => order.Status.Id != 2).OrderBy(o => o.Status.Id).ToList());
+            return mapper.Map<IEnumerable<OrderDTO>>(unitOfWork.Orders.GetAll().Where(order => order.Status.Id != 2).OrderBy(o => o.Status.Id).ToList());
         }
 
         /// <summary>
