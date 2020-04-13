@@ -11,16 +11,6 @@ namespace VeronaTour.WEB
 {
     public class MvcApplication : System.Web.HttpApplication
     {
-        protected void Application_Error(object sender, EventArgs e)
-        {
-            Exception exception = Server.GetLastError();
-
-            if (exception != null)
-            {
-                //log the error
-            }
-        }
-
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();

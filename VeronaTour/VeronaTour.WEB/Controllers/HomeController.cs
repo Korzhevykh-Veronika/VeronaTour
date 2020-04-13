@@ -35,7 +35,7 @@ namespace VeronaTour.WEB.Controllers
             {
                 var userDto = identityService.GetUserByEmail(user.Identity.Name, UserManager);
 
-                this.ViewData["TotalPrice"] = Convert.ToInt32(ordersService.GetTotalPriceForNotRegisterOrdersForUser(userDto.Id) * GetSale());
+                this.ViewData["TotalPrice"] = Convert.ToInt32(ordersService.GetTotalPriceForNotRegisterOrdersForUser(userDto.Id) * (1.0 - (double)currentUser.Sale / 100));
             }
             else
             {
@@ -137,6 +137,7 @@ namespace VeronaTour.WEB.Controllers
 
             ViewData["MinDate"] = toursViewModel.FilterOptions.SelectedStartDate;
             ViewData["MaxDate"] = toursViewModel.FilterOptions.SelectedEndDate;
+
             return View(toursViewModel);
         }
 
@@ -192,7 +193,7 @@ namespace VeronaTour.WEB.Controllers
         {
             var errors = ordersService.RegisterOrders(currentUser.Id);
 
-            if (errors.Count() != 0)
+            if (errors.Any())
             {
                 AddErrors(errors);
                 ViewData["OrderRegistrationStatus"] = "failure";
@@ -202,6 +203,7 @@ namespace VeronaTour.WEB.Controllers
                 ViewData["OrderRegistrationStatus"] = "success";
                 ViewData["TotalPrice"] = 0;
             }
+
             var orders = ordersService.GetNotRegisterOrdersForUser(currentUser.Id);
 
             var notRegisteredOrder = new NotRegisteredOrdersViewModel
@@ -222,6 +224,7 @@ namespace VeronaTour.WEB.Controllers
         public ActionResult DeleteOrder(int id)
         {
             ordersService.DeleteOrder(id);
+
             return RedirectToAction("Order");
         }
         
@@ -272,15 +275,16 @@ namespace VeronaTour.WEB.Controllers
         
         [HttpGet]
         public ActionResult UserOrder()
-        {
-            
+        {            
             var orders = ordersService.GetRegisterOrdersForUser(currentUser.Id);
+
             var registeredOrder = new OrdersViewModel
             {
                 RegisteredOrder = orders,
                 Sale = currentUser.Sale,
                 TotalPrice = ordersService.GetTotalPriceForRegisterOrdersForUser(currentUser.Id)
             };
+
             return View(registeredOrder);
         }
 
@@ -288,13 +292,6 @@ namespace VeronaTour.WEB.Controllers
         public ActionResult Error404()
         {
             Response.StatusCode = 404;
-            return View();
-        }
-
-        [AllowAnonymous]
-        public ActionResult Error403()
-        {
-            Response.StatusCode = 403;
             return View();
         }
 

@@ -12,10 +12,10 @@ using VeronaTour.BLL.Utils;
 namespace VeronaTour.WEB.Controllers
 {
     [Authorize]
-    public class VeronaBaseController : Controller
+    public abstract class VeronaBaseController : Controller
     {
-        private ApplicationSignInManager _signInManager;
-        private ApplicationUserManager _userManager;
+        private ApplicationSignInManager signInManager;
+        private ApplicationUserManager userManager;
 
         protected IMainService mainService;
         protected IIdentityService identityService;
@@ -46,20 +46,20 @@ namespace VeronaTour.WEB.Controllers
             }
         }
 
-        protected double GetSale()
-        {
-            return 1.0 - (double)currentUser.Sale / 100;
-        }
-
         public ApplicationSignInManager SignInManager
         {
             get
             {
-                return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
+                if(signInManager == null)
+                {
+                    signInManager = HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
+                }
+
+                return signInManager;
             }
             private set
             {
-                _signInManager = value;
+                signInManager = value;
             }
         }
 
@@ -67,11 +67,17 @@ namespace VeronaTour.WEB.Controllers
         {
             get
             {
-                return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
+                if (userManager == null)
+                {
+                     userManager = HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
+                }
+
+                return userManager;
+
             }
             private set
             {
-                _userManager = value;
+                userManager = value;
             }
         }
 

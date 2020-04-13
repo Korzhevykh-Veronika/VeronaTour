@@ -10,6 +10,7 @@ namespace VeronaTour.WEB.Filters
         public void OnException(ExceptionContext сontext)
         {
             logger.Fatal(сontext.Exception, "Unhandled excepition");
+            сontext.ExceptionHandled = true;
         }
     }
 }

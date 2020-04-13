@@ -194,7 +194,7 @@ namespace VeronaTour.BLL.Services
         {
             var errors = new List<string>();
 
-            var registerOrders = unitOfWork.Orders.Find(order => order.User.UserId == userId && order.Status.Title == "Not registered");
+            var registerOrders = unitOfWork.Orders.Find(order => order.User.UserId == userId && order.Status.Title == "Not registered").ToList();
 
             var status = unitOfWork.OrderStatuses.Get(1);
 

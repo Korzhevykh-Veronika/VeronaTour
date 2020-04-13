@@ -161,7 +161,7 @@ namespace VeronaTour.WEB.Controllers
                     model.SelectedCountry,
                     model.uploadImage);
 
-                if (errors.Count() == 0)
+                if (!errors.Any())
                 {
                     return RedirectToAction("Tours");
                 }
@@ -190,7 +190,7 @@ namespace VeronaTour.WEB.Controllers
             {
                 var errors = mainService.AddHotel(hotel);
 
-                if (errors.Count() == 0)
+                if (!errors.Any())
                 {
                     return RedirectToAction("Hotels");
                 }
@@ -215,7 +215,7 @@ namespace VeronaTour.WEB.Controllers
             {
                 var errors = mainService.AddCountry(country);
 
-                if (errors.Count() == 0)
+                if (!errors.Any())
                 {
                     return RedirectToAction("CreateTour");
                 }
@@ -241,7 +241,7 @@ namespace VeronaTour.WEB.Controllers
             {
                 var errors = mainService.AddTourType(tourType);
 
-                if (errors.Count() == 0)
+                if (!errors.Any())
                 {
                     return RedirectToAction("CreateTour");
                 }
@@ -274,6 +274,7 @@ namespace VeronaTour.WEB.Controllers
                 return View(model);
 
             }
+
             return HttpNotFound();
         }
 
@@ -291,7 +292,7 @@ namespace VeronaTour.WEB.Controllers
                   model.SelectedCountry,
                   model.uploadImage);
 
-                if (errors.Count() == 0)
+                if (!errors.Any())
                 {
                     return RedirectToAction("Tours");
                 }
@@ -327,7 +328,7 @@ namespace VeronaTour.WEB.Controllers
             {
                 var errors = mainService.EditHotel(model);
 
-                if (errors.Count() == 0)
+                if (!errors.Any())
                 {
                     return RedirectToAction("Hotels");
                 }
@@ -359,8 +360,8 @@ namespace VeronaTour.WEB.Controllers
         public ActionResult DeleteTour(int id)
         {
             toursService.DeleteTour(id);
-           return RedirectToAction("Tours");
-            
+
+            return RedirectToAction("Tours");
         }
 
         [Authorize(Roles = "Admin")]
@@ -368,13 +369,13 @@ namespace VeronaTour.WEB.Controllers
         {
             var errors = mainService.DeleteHotel(id);
 
-            if(errors.Count() != 0)
+            if (errors.Any())
             {
                 AddErrors(errors);
 
                 var hotels = mainService.GetHotels();
-                return View("Hotels", hotels);
 
+                return View("Hotels", hotels);
             }
 
             return RedirectToAction("Hotels");
@@ -423,7 +424,6 @@ namespace VeronaTour.WEB.Controllers
             ViewData["MaxDate"] = mainService.GetIn2WeeksDate();
 
             return addTour;
-        }
-        
+        }        
     }
 }
