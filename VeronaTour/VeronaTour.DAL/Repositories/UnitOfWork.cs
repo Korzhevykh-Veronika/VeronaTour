@@ -96,7 +96,10 @@ namespace VeronaTour.DAL
         
         public void Dispose()
         {
-            dbContext.Dispose();
+            if(dbContext != null)
+            {
+                dbContext.Dispose();
+            }            
         }
     }
 }

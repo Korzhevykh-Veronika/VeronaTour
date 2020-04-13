@@ -10,7 +10,6 @@ namespace VeronaTour.BLL.Services
         IEnumerable<TourTypeDTO> GetTourTypes();
         IEnumerable<HotelDTO> GetHotels();
         IEnumerable<ExceptionDetailDTO> GetLogs();
-        IEnumerable<UserDTO> GetUsers();
         IEnumerable<string> GetTourTypesTitles();
         IEnumerable<string> GetFeedingTypesTitles();
         IEnumerable<string> GetHotelsTitles();
@@ -24,5 +23,7 @@ namespace VeronaTour.BLL.Services
         IEnumerable<string> AddTourType(TourTypeDTO tourType);
         IEnumerable<string> AddHotel(HotelDTO hotel);        
         IEnumerable<string> EditHotel(HotelDTO hotel);
+        
+
     }
 }

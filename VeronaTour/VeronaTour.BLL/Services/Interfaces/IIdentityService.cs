@@ -22,11 +22,12 @@ namespace VeronaTour.BLL.Services.Interfaces
         
         Task<IEnumerable<string>> GetRoles();
 
-        Task UpdateUserSettings(
+        Task<IEnumerable<string>> UpdateUserSettings(
             string email,
             string selectedRole,
             string isBlocked,
-            ApplicationUserManager userManager);
+            ApplicationUserManager userManager,
+            string currentUserEmail);
 
         Task<IEnumerable<string>> RegisterUser(UserDTO user,
             ApplicationUserManager userManager,

@@ -4,26 +4,25 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Linq;
-using System.Linq.Expressions;
 using VeronaTour.DAL.Interfaces;
 
 namespace VeronaTour.DAL.Repositories
 {
     public class GeneralRepository<T> : IRepository<T> where T : class
     {
-        private DbContext DbContext { get; set; }
-        private DbSet<T> DbSet { get; set; }
+        private readonly DbContext dbContext;
+        private readonly DbSet<T> dbSet;
 
         private ILogger logger;
 
-        public GeneralRepository(DbContext dbContext, ILogger newLogger)
+        public GeneralRepository(DbContext newDbContext, ILogger newLogger)
         {
-            if (dbContext == null)
+            if (newDbContext == null)
                 throw new ArgumentNullException("dbContext");
             else
             {
-                DbContext = dbContext;
-                DbSet = DbContext.Set<T>();
+                dbContext = newDbContext;
+                dbSet = dbContext.Set<T>();
                 logger = newLogger;
             }
         }
@@ -32,7 +31,7 @@ namespace VeronaTour.DAL.Repositories
         {
             try
             {
-                return DbSet.AsNoTracking();
+                return dbSet.AsNoTracking();
             }
             catch(Exception ex)
             {
@@ -46,7 +45,7 @@ namespace VeronaTour.DAL.Repositories
         {
             try
             {
-                return DbSet.Where(predicate);
+                return dbSet.Where(predicate);
             }
             catch(Exception ex)
             {
@@ -60,7 +59,7 @@ namespace VeronaTour.DAL.Repositories
         {
             try
             {
-                return DbSet.Find(id);
+                return dbSet.Find(id);
             }
             catch(Exception ex)
             {
@@ -74,9 +73,9 @@ namespace VeronaTour.DAL.Repositories
         {
             try
             {
-                DbSet.AddOrUpdate(entity);
+                dbSet.AddOrUpdate(entity);
 
-                DbContext.SaveChanges();
+                dbContext.SaveChanges();
             }
             catch (Exception ex)
             {
@@ -88,8 +87,8 @@ namespace VeronaTour.DAL.Repositories
         {
             try
             {
-                DbContext.Entry(entity).State = EntityState.Modified;
-                DbContext.SaveChanges();
+                dbContext.Entry(entity).State = EntityState.Modified;
+                dbContext.SaveChanges();
             }
             catch(Exception ex)
             {
@@ -97,33 +96,16 @@ namespace VeronaTour.DAL.Repositories
             }            
         }
 
-        public void Update(IEnumerable<T> entities)
-        {
-            try
-            { 
-                foreach (var entity in entities)
-                {
-                    DbContext.Entry(entity).State = EntityState.Modified;
-                }
-
-                DbContext.SaveChanges();
-            }
-            catch(Exception ex)
-            {
-                logger.Error(ex, "SQL error");
-            }           
-        }
-
         public void Delete(int id)
         {
             try
             {
-                var deleteItem = DbSet.Find(id);
+                var deleteItem = dbSet.Find(id);
 
                 if (deleteItem != null)
                 { 
-                    DbSet.Remove(deleteItem);
-                    DbContext.SaveChanges();
+                    dbSet.Remove(deleteItem);
+                    dbContext.SaveChanges();
                 }
                 else
                 {

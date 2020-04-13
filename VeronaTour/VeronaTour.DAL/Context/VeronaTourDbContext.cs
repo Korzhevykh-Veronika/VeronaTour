@@ -8,12 +8,10 @@ namespace VeronaTour.DAL.EF
     {
         public VeronaTourDbContext() : base("DefaultConnection")
         {
-            Database.SetInitializer<VeronaTourDbContext>(null);
+            Database.SetInitializer<VeronaTourDbContext>(new CreateDatabaseIfNotExists<VeronaTourDbContext>());
 
-            this.Database.CreateIfNotExists();
             this.Database.Initialize(true);
 
-            this.Configuration.ProxyCreationEnabled = true;
             this.Configuration.LazyLoadingEnabled = true;
         }
         public DbSet<Tour> Tours { get; set; }

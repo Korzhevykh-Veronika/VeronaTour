@@ -18,9 +18,7 @@ namespace VeronaTour.BLL.Services
         private IUnitOfWork unitOfWork;
         private IMapper mapper;
         private ILogger logger;
-
-        const string variantAll = "Choose...";
-
+        
         /// <summary>
         ///     Constructor
         /// </summary>
@@ -208,7 +206,7 @@ namespace VeronaTour.BLL.Services
                     ro.DateOrder = DateTime.Now;
                     ro.DateUpdateOrder = DateTime.Now;
                     ro.Tour.CountOfTour = ro.Tour.CountOfTour - ro.NumberOfPeople;
-
+                    unitOfWork.Orders.Update(ro);
                     logger.Info($"Order #{ro.Id} was registered.");
                 }
                 else
@@ -216,9 +214,8 @@ namespace VeronaTour.BLL.Services
                     errors.Add($"{ro.Tour.Title} doesn't have enought places.");
                     logger.Warn($"Cannot register order #{ro.Id} | {ro.Tour.Title} doesn't have enought places.");
                 }
-            }
-
-            unitOfWork.Orders.Update(registerOrders);
+                
+            }            
 
             return errors;
         }

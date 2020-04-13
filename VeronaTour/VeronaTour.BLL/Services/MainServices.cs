@@ -119,15 +119,6 @@ namespace VeronaTour.BLL.Services
         }
 
         /// <summary>
-        ///     Get users information
-        /// </summary>
-        /// <returns>Users information</returns>
-        public IEnumerable<UserDTO> GetUsers()
-        {
-            return mapper.Map<IEnumerable<UserDTO>>(unitOfWork.Users.GetAll());
-        }
-
-        /// <summary>
         ///     Get all tour types titles. Used for filtering
         /// </summary>
         /// <returns>Tour type titles</returns>
@@ -208,7 +199,7 @@ namespace VeronaTour.BLL.Services
                 logger.Warn($"{country.Title} has been already presented ");
             }
 
-            if (errors.Count() == 0)
+            if (!errors.Any())
             {
                 unitOfWork.Countries.Create(countryEntity);
             }
@@ -233,7 +224,7 @@ namespace VeronaTour.BLL.Services
                 logger.Warn($"{tourType.Title} has been already presented ");
             }
 
-            if (errors.Count() == 0)
+            if (!errors.Any())
             {
                 unitOfWork.TourTypes.Create(tourtypeEntity);
             }
@@ -260,7 +251,7 @@ namespace VeronaTour.BLL.Services
                 logger.Warn($"{hotel.Title} has been already presented ");
             }
 
-            if (errors.Count() == 0)
+            if (!errors.Any())
             {
                 unitOfWork.Hotels.Create(hotelEntity);
             }
@@ -287,7 +278,7 @@ namespace VeronaTour.BLL.Services
 
             var hotelEntity = unitOfWork.Hotels.Get(hotel.Id);
 
-            if (errors.Count() == 0)
+            if (!errors.Any())
             {
                 hotelEntity.Id = hotel.Id;
                 hotelEntity.Title = hotel.Title;
@@ -317,13 +308,13 @@ namespace VeronaTour.BLL.Services
                 logger.Warn($"{hotel.Title} cannot be deleted, because some tours reference to it ");
             }
 
-            if (result.Count() == 0 && hotel != null)
+            if (!result.Any() && hotel != null)
             {
                 hotel.IsDeleted = true;
                 unitOfWork.Hotels.Update(hotel);
             }
 
             return result;
-        }
-    }
+        }      
+}
 }

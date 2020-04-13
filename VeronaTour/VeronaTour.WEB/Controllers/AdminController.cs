@@ -30,10 +30,9 @@ namespace VeronaTour.WEB.Controllers
             toursService = newToursService;
             ordersService = newOrdersService;
 
-            var userManager = HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
             var user = identityService.GetUserByEmail(
                 System.Web.HttpContext.Current.User.Identity.Name,
-                userManager);
+                UserManager);
 
             if(user != null) ViewData["UserName"] = user.Name;
         }
@@ -104,8 +103,7 @@ namespace VeronaTour.WEB.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Users()
         {
-            var userManager = HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
-            var newUsers = await identityService.GetUsers(userManager);
+            var newUsers = await identityService.GetUsers(UserManager);
 
             var model = new UsersViewModel()
             {
@@ -121,20 +119,14 @@ namespace VeronaTour.WEB.Controllers
         [HttpPost]
         public async Task<ActionResult> UpdateUserSettings(UsersViewModel model, string email)
         {
-            var userManager = HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
-            var errors = new List<string>();
-
-            if (email != currentUser.Email)
-                await identityService.UpdateUserSettings(email, model.SelectedRole, model.IsBlocked, userManager);
-            else
-                errors.Add("You cannot update yourself.");
+            var errors = await identityService.UpdateUserSettings(email, model.SelectedRole, model.IsBlocked, UserManager, currentUser.Email);
 
             if (errors.Any())
             {
                 AddErrors(errors);                
             }
 
-            var users = await identityService.GetUsers(userManager);
+            var users = await identityService.GetUsers(UserManager);
 
             var newModel = new UsersViewModel()
             {
@@ -354,13 +346,10 @@ namespace VeronaTour.WEB.Controllers
 
             if (status == "Paid")
             {
-                var userManager = HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
-                var signInManager = HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
-
                 await identityService.RecalculateSaleByOrder(
                     orderId,
-                    userManager,
-                    signInManager);
+                    UserManager,
+                    SignInManager);
             }
 
             return RedirectToAction("Orders");
@@ -390,7 +379,8 @@ namespace VeronaTour.WEB.Controllers
 
             return RedirectToAction("Hotels");
         }
-        
+
+        [Authorize(Roles = "Admin, Manager")]
         [HttpGet]
         public ActionResult Sale()
         {
@@ -411,12 +401,14 @@ namespace VeronaTour.WEB.Controllers
             return View();
         }
 
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
         public ActionResult Logs()
         {
             var logs = mainService.GetLogs();
             return View(logs);
         }
-
+        
         private AddTourViewModel InitialteTourViewModel()
         {
             var addTour = new AddTourViewModel

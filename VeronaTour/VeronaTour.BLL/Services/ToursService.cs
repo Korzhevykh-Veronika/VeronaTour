@@ -123,7 +123,7 @@ namespace VeronaTour.BLL.Services
         /// <returns>Sequence of tours</returns>
         public IEnumerable<TourDTO> GetFilteredTours(FilterDTO filterOptions)
         {
-            var tours = unitOfWork.Tours.Find(t => !t.IsDeleted && t.CountOfTour > 0).ToList();
+            var tours = unitOfWork.Tours.Find(t => !t.IsDeleted && t.CountOfTour > 0);
             var hotel = unitOfWork.Hotels.GetAll().ToList();
             var feedingTypes = unitOfWork.FeedingTypes.GetAll();
 
@@ -152,40 +152,39 @@ namespace VeronaTour.BLL.Services
             if (!String.IsNullOrEmpty(filterOptions.SelectedCountry)
                 && !filterOptions.SelectedCountry.Equals(variantAll))
             {
-                tours = tours.Where(t => t.Country.Title == filterOptions.SelectedCountry).ToList();
+                tours = tours.Where(t => t.Country.Title == filterOptions.SelectedCountry);
             }
             if (!String.IsNullOrEmpty(filterOptions.SelectedTourType)
                 && !filterOptions.SelectedTourType.Equals(variantAll))
             {
-                tours = tours.Where(t => t.Type.Title == filterOptions.SelectedTourType).ToList();
+                tours = tours.Where(t => t.Type.Title == filterOptions.SelectedTourType);
             }
             if (!String.IsNullOrEmpty(filterOptions.SelectedStartDate))
             {
-                tours = tours.Where(t => DateTime.ParseExact(filterOptions.SelectedStartDate, "MM/dd/yyyy", null) <= t.StartDate).ToList();
+                tours = tours.Where(t => DateTime.ParseExact(filterOptions.SelectedStartDate, "MM/dd/yyyy", null) <= t.StartDate);
             }
             if (!String.IsNullOrEmpty(filterOptions.SelectedEndDate))
             {
-                tours = tours.Where(t => DateTime.ParseExact(filterOptions.SelectedEndDate, "MM/dd/yyyy", null) >= t.EndDate).ToList();
+                tours = tours.Where(t => DateTime.ParseExact(filterOptions.SelectedEndDate, "MM/dd/yyyy", null) >= t.EndDate);
             }
             if (filterOptions.SelectedNumberOfPeople != 0)
             {
                 tours = tours
-                    .Where(t => 
-                        t.MinPeopleCount <= filterOptions.SelectedNumberOfPeople 
-                        && filterOptions.SelectedNumberOfPeople <= t.MaxPeopleCount)
-                    .ToList();
+                    .Where(t =>
+                        t.MinPeopleCount <= filterOptions.SelectedNumberOfPeople
+                        && filterOptions.SelectedNumberOfPeople <= t.MaxPeopleCount);
             }
             if (filterOptions.SelectedPrice != 0)
             {
-                tours = tours.Where(t => t.Price <= filterOptions.SelectedPrice).ToList();
+                tours = tours.Where(t => t.Price <= filterOptions.SelectedPrice);
             }
             if (filterOptions.CheckedFood != null)
             {
-                tours = tours.Where(t => selectedFeedingTypesIds.Contains(t.FeedingType.Id)).ToList();
+                tours = tours.Where(t => selectedFeedingTypesIds.Contains(t.FeedingType.Id));
             }
             if (filterOptions.CheckedHotel != null)
             {
-                tours = tours.Where(t => selectedHotelIds.Contains(t.Hotel.Id)).ToList();
+                tours = tours.Where(t => selectedHotelIds.Contains(t.Hotel.Id));
             }
 
             return mapper.Map<IEnumerable<TourDTO>>(tours);

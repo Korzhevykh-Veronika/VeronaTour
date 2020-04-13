@@ -33,8 +33,7 @@ namespace VeronaTour.WEB.Controllers
             var user = System.Web.HttpContext.Current.User;
             if (user != null && user.Identity.IsAuthenticated)
             {
-                var userManager = HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
-                var userDto = identityService.GetUserByEmail(user.Identity.Name, userManager);
+                var userDto = identityService.GetUserByEmail(user.Identity.Name, UserManager);
 
                 this.ViewData["TotalPrice"] = Convert.ToInt32(ordersService.GetTotalPriceForNotRegisterOrdersForUser(userDto.Id) * GetSale());
             }
@@ -253,9 +252,6 @@ namespace VeronaTour.WEB.Controllers
         {
             if (ModelState.IsValid)
             {
-                var userManager = HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
-                var signInManager = HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
-
                 var newUser = new UserDTO
                 {
                     Email = editUserViewModel.Email,
@@ -266,7 +262,7 @@ namespace VeronaTour.WEB.Controllers
 
                 var userEmail = currentUser.Email;
 
-                await identityService.UpdateUser(userEmail, newUser, userManager, signInManager);
+                await identityService.UpdateUser(userEmail, newUser, UserManager, SignInManager);
 
                 return RedirectToAction("Profile");
             }

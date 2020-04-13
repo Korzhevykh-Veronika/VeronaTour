@@ -32,15 +32,6 @@ namespace VeronaTour.BLL.Services
             logger = newLogger;
         }
 
-        protected RoleManager<IdentityRole> RoleManager
-        {
-            get
-            {
-                var context = new VeronaTourDbContext();
-                return new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
-            }
-        }
-
         /// <summary>
         ///     Updates user information 
         /// </summary>
@@ -55,7 +46,7 @@ namespace VeronaTour.BLL.Services
             ApplicationUserManager userManager,
             ApplicationSignInManager signInManager)
         {
-            var user = userManager.FindByNameAsync(userEmail).Result;
+            var user = await userManager.FindByNameAsync(userEmail);
 
             user.Email = userDto.Email;
             user.UserName = userDto.Email;
@@ -149,33 +140,49 @@ namespace VeronaTour.BLL.Services
         /// <param name="isBlocked">Should user be bloced by a system</param>
         /// <param name="userManager">Manager of users</param>
         /// <returns></returns>
-        public async Task UpdateUserSettings(
+        public async Task<IEnumerable<string>> UpdateUserSettings(
             string email,
             string selectedRole,
             string isBlocked,
-            ApplicationUserManager userManager)
+            ApplicationUserManager userManager,
+            string currentUserEmail)
         {
-            var user = await userManager.FindByNameAsync(email);
+            var errors = new List<string>();
 
-            if (user != null)
+            if (email == currentUserEmail)
             {
-                var previousRoles = userManager.GetRoles(user.Id);
-                userManager.RemoveFromRoles(user.Id, previousRoles.ToArray());
-
-                await userManager.AddToRoleAsync(user.Id, selectedRole);
-
-                user.IsBlocked = isBlocked == "on";
-
-                await userManager.UpdateAsync(user);
-                await userManager.UpdateSecurityStampAsync(user.Id).ConfigureAwait(false);
-
-                var userStoreManager = new UserStore<User>(new VeronaTourDbContext());
-                userStoreManager.Context.SaveChanges();
-
-                logger.Info($"{user.UserName}`s settings were updated.");
+                errors.Add("You cannot update yourself.");
+                logger.Warn($"{email} tries to update himself.");
             }
 
-            logger.Warn($"Cannot find user by name {email}.");
+            if (!errors.Any())
+            {
+                var user = await userManager.FindByNameAsync(email);
+
+                if (user != null)
+                {
+                    var previousRoles = userManager.GetRoles(user.Id);
+                    userManager.RemoveFromRoles(user.Id, previousRoles.ToArray());
+
+                    await userManager.AddToRoleAsync(user.Id, selectedRole);
+
+                    user.IsBlocked = isBlocked == "on";
+
+                    await userManager.UpdateAsync(user);
+                    await userManager.UpdateSecurityStampAsync(user.Id).ConfigureAwait(false);
+
+                    var userStoreManager = new UserStore<User>(new VeronaTourDbContext());
+                    userStoreManager.Context.SaveChanges();
+
+                    logger.Info($"{user.UserName}`s settings were updated.");
+                }
+                else
+                {
+                    logger.Warn($"Cannot find user by name {email}.");
+                }
+            }
+
+            return errors;
         }
 
         /// <summary>

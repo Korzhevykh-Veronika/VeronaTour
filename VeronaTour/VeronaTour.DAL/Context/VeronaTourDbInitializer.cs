@@ -8,7 +8,7 @@ using VeronaTour.DAL.Entites;
 
 namespace VeronaTour.DAL.EF
 {
-    public class VeronaTourDbInitializer : DropCreateDatabaseAlways<VeronaTourDbContext>
+    public class VeronaTourDbInitializer : CreateDatabaseIfNotExists<VeronaTourDbContext>
     {
         protected override void Seed(VeronaTourDbContext db)
         {

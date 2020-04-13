@@ -38,13 +38,6 @@ namespace VeronaTour.WEB.Controllers
             }
         }
 
-        protected override void OnException(ExceptionContext filterContext)
-        {
-            logger.Fatal(filterContext.Exception, "Unhandled exception");
-
-            base.OnException(filterContext);
-        }
-
         protected void AddErrors(IEnumerable<string> errors)
         {
             foreach (var error in errors)
@@ -82,7 +75,7 @@ namespace VeronaTour.WEB.Controllers
             }
         }
 
-        protected new HttpContextBase HttpContext
+        private new HttpContextBase HttpContext
         {
             get
             {
@@ -94,10 +87,9 @@ namespace VeronaTour.WEB.Controllers
 
         private UserDTO GetCurrentUser()
         {
-            var userManager = HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
             var user = identityService.GetUserByEmail(
                 System.Web.HttpContext.Current.User.Identity.Name,
-                userManager);
+                UserManager);
 
             return user;
         }

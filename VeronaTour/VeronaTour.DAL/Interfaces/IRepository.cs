@@ -10,7 +10,6 @@ namespace VeronaTour.DAL.Interfaces
         IEnumerable<T> Find(Func<T, bool> predicate);
         void Create(T item);
         void Update(T item);
-        void Update(IEnumerable<T> entities);
         void Delete(int id);
     }
 }

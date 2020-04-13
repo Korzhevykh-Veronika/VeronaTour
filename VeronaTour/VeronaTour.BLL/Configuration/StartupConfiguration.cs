@@ -39,10 +39,6 @@ namespace VeronaTour.BLL.Configuration
             });
             app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);
 
-            System.Data.Entity.Database.SetInitializer(new VeronaTourDbInitializer());
-            var context = new VeronaTourDbContext();
-            context.Database.Initialize(true);
-
             CreateRoles();
         }
 
